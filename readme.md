@@ -17,5 +17,5 @@ Reelbook é um site para avaliação e catalogo de filmes
 
 - Estella + Página inicial e identidade visual 
 - João    + Página de filmes e integração com API 
-- Nicolle + Listas, favoritos e LocalStorage |
-- Oswaldo + Diário, perfil e responsividade |
+- Nicolle + Listas, favoritos e LocalStorage 
+- Oswaldo + Diário, perfil e responsividade 
