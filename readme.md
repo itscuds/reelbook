@@ -39,3 +39,9 @@ O ReelBook foi pensado para tornar a experiência de descobrir e acompanhar film
 13. Perfil do usuário — Exibir informações e atividade do usuário.
 14. Comentários/reviews — Permitir que o usuário escreva uma avaliação sobre um filme.
 15. Visualizar avaliações — Exibir notas e comentários de outros usuários.
+
+
+
+# Testando Commit
+
+Um breve teste de commit
