@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ReelBook — catálogo e descoberta de filmes">
+  <title>ReelBook — Filmes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ReelBook início">
+      <span class="brand-mark">R</span>
+      <span>Reel<span>Book</span></span>
+    </a>
+
+    <nav class="main-nav">
+      <a class="active" href="#">Filmes</a>
+      <a href="#populares">Populares</a>
+      <a href="#favoritos">Favoritos <span id="favoriteCount" class="nav-count">0</span></a>
+    </nav>
+
+    <div class="top-actions">
+      <button class="icon-button" id="themeToggle" title="Alternar tema" aria-label="Alternar tema">☼</button>
+      <div class="avatar">V</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">DESCUBRA SEU PRÓXIMO FILME</p>
+        <h1>O cinema que<br><em>combina com você.</em></h1>
+        <p class="hero-text">Pesquise, explore e encontre filmes para assistir hoje. Tudo conectado ao catálogo do TMDB.</p>
+
+        <form class="search-box" id="searchForm">
+          <span class="search-icon">⌕</span>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="Buscar por título..." aria-label="Buscar filmes">
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
+
+      <div class="hero-poster" aria-hidden="true">
+        <div class="poster-stack">
+          <div class="poster-card poster-back"></div>
+          <div class="poster-card poster-front">
+            <div class="poster-glow"></div>
+            <span>REEL<br>BOOK</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog" id="populares">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CATÁLOGO</p>
+          <h2 id="sectionTitle">Filmes populares</h2>
+        </div>
+        <span id="resultInfo" class="result-info"></span>
+      </div>
+
+      <div class="filters">
+        <label>
+          <span>Gênero</span>
+          <select id="genreFilter">
+            <option value="">Todos</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Ano</span>
+          <select id="yearFilter">
+            <option value="">Todos</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Nota mínima</span>
+          <select id="ratingFilter">
+            <option value="">Qualquer nota</option>
+            <option value="8">8+</option>
+            <option value="7">7+</option>
+            <option value="6">6+</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Ordenar</span>
+          <select id="sortFilter">
+            <option value="popularity.desc">Popularidade</option>
+            <option value="vote_average.desc">Melhor avaliação</option>
+            <option value="primary_release_date.desc">Mais recentes</option>
+            <option value="title.asc">Título A–Z</option>
+          </select>
+        </label>
+
+        <button class="clear-filters" id="clearFilters">Limpar filtros</button>
+      </div>
+
+      <div id="status" class="status" hidden></div>
+      <div id="movieGrid" class="movie-grid"></div>
+
+      <div class="pagination">
+        <button id="prevPage" class="page-button" disabled>← Anterior</button>
+        <span id="pageInfo">Página 1</span>
+        <button id="nextPage" class="page-button">Próxima →</button>
+      </div>
+    </section>
+
+    <section class="favorites-section" id="favoritos">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SUA COLEÇÃO</p>
+          <h2>Favoritos</h2>
+        </div>
+        <span class="result-info">Salvos neste navegador</span>
+      </div>
+      <div id="favoritesGrid" class="movie-grid compact-grid"></div>
+      <p id="emptyFavorites" class="empty-state">Você ainda não favoritou nenhum filme.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">ReelBook</div>
+    <p>Dados e imagens de filmes fornecidos por TMDB.</p>
+    <p class="tmdb-note">Este produto usa a API do TMDB, mas não é endossado ou certificado pelo TMDB.</p>
+  </footer>
+
+  <div id="movieModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <article class="modal-card">
+      <button class="modal-close" data-close-modal aria-label="Fechar">×</button>
+      <div id="modalContent"></div>
+    </article>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
