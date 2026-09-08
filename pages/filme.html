@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReelBook — Detalhes do filme</title>
+  <link rel="icon" href="../assets/images/logo-icon.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body data-page="filme" data-basepath="../">
+
+  <header id="app-navbar" class="navbar container"></header>
+
+  <!--
+    João aqui tá com um filme fixo só pra mostrar como fica o
+    layout. Falta:
+      - pegar o id do filme pela URL (dá pra usar URLSearchParams)
+      - buscar os dados de verdade na API do TMDb (sinopse, elenco, direção...)
+      - as avaliações de usuário vêm do banco de dados do projeto, não da API
+    os botões "Avaliar", "Favoritar" e "Marcar como assistido" tb não
+    fazem nada ainda, isso é junto com favoritos/diário
+  -->
+  <main class="container section movie-detail">
+    <div class="movie-detail__poster">
+      <img src="https://placehold.co/400x600/1e1e2a/a78bfa?font=poppins&text=Interestelar" alt="Pôster de Interestelar" />
+    </div>
+
+    <div class="movie-detail__info">
+      <h1>Interestelar</h1>
+      <p class="text-muted">2014 · 2h 49min · Ficção científica, Drama</p>
+      <p class="movie-card__rating" style="font-size: var(--fs-md); margin-top: 8px;">★ 4.7 <span class="text-faint">(2.1 mil avaliações)</span></p>
+
+      <div class="toolbar" style="margin-top: var(--space-5);">
+        <button class="btn btn--primary" disabled>Avaliar</button>
+        <button class="btn btn--outline" disabled>+ Favoritar</button>
+        <button class="btn btn--outline" disabled>✓ Marcar como assistido</button>
+      </div>
+
+      <p style="margin-top: var(--space-6); max-width: 60ch;">
+        Um grupo de exploradores viaja através de um buraco de minhoca numa
+        tentativa de garantir a sobrevivência da humanidade.
+      </p>
+
+      <div class="movie-detail__meta" style="margin-top: var(--space-6);">
+        <div>
+          <p class="text-faint">Direção</p>
+          <p>Christopher Nolan</p>
+        </div>
+        <div>
+          <p class="text-faint">Roteiro</p>
+          <p>Jonathan Nolan</p>
+        </div>
+        <div>
+          <p class="text-faint">País</p>
+          <p>EUA, Reino Unido</p>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-6);">
+        <p class="text-faint" style="margin-bottom: var(--space-3);">Avaliações</p>
+        <div class="empty-state">
+          As avaliações de outros usuários vão aparecer aqui quando o banco de dados estiver conectado.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer container">
+    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+  </footer>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>
