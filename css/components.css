@@ -1,0 +1,434 @@
+/* components.css */
+
+/* logo (ícone + "ReelBook"), fica sempre no canto superior
+   esquerdo da navbar */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.logo img {
+  width: 36px;
+  height: 36px;
+}
+
+.logo__text {
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo__reel { color: var(--color-text); }
+.logo__book { color: var(--color-primary-light); }
+
+/* navbar — o html é gerado pelo JS (renderNavbar, em
+   components.js), então só existe UM lugar pra mudar o menu e
+   já reflete em todas as páginas de uma vez */
+.navbar {
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background-color: var(--color-bg);
+  z-index: 50;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.navbar__links a {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding-block: var(--space-2);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.navbar__links a:hover,
+.navbar__links a.is-active {
+  color: var(--color-text);
+  border-bottom-color: var(--color-primary);
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+}
+
+/* botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.btn--primary:hover { background-color: var(--color-primary-hover); }
+
+.btn--outline {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+.btn--outline:hover { border-color: var(--color-text-muted); }
+
+.btn--sm { padding: 8px 16px; font-size: var(--fs-xs); }
+.btn--full { width: 100%; }
+
+/* card de filme + grid — usado na home */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-5);
+}
+
+.movie-card {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg-elevated);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.movie-card__poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background-color: var(--color-bg-elevated-2);
+}
+
+.movie-card__info {
+  padding: var(--space-3);
+}
+
+.movie-card__title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-1);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.movie-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-star);
+  font-weight: 600;
+}
+
+/* css base de formulário, vai servir pro login/cadastro
+   quando alguém fizer, e pra filtro também */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.field input,
+.field select {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--color-text);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--color-primary);
+}
+
+/* barra de busca + filtros, usada no Explorar por enquanto */
+.toolbar {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: var(--color-text);
+}
+
+.search-input:focus { border-color: var(--color-primary); }
+
+.toolbar__filters {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.toolbar__filters select {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--color-text-muted);
+}
+
+/* pra quando não tem nada pra mostrar ainda (tela vazia) */
+.empty-state {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-elevated-2);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* layout da página de detalhes do filme */
+.movie-detail {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-7);
+}
+
+.movie-detail__poster img {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.movie-detail__meta {
+  display: flex;
+  gap: var(--space-7);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .movie-detail { grid-template-columns: 1fr; }
+  .movie-detail__poster { max-width: 220px; }
+}
+
+/* card de lista, usado em "Minhas listas" */
+.lista-collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.lista-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease;
+}
+
+.lista-card:hover { background-color: var(--color-bg-elevated-2); }
+
+.lista-card__nome { font-weight: 600; }
+
+.lista-card__capas {
+  display: flex;
+}
+
+.lista-card__capas img {
+  width: 44px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-bg-elevated);
+  margin-left: -14px;
+}
+
+.lista-card__capas img:first-child { margin-left: 0; }
+
+/* tela do diário */
+.diario-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.diario-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.diario-item__poster {
+  width: 56px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.diario-item__info { flex: 1; }
+.diario-item__titulo { font-weight: 600; }
+
+/* tela de perfil */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.perfil-header__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 3px solid var(--color-border);
+}
+
+.perfil-stats {
+  display: flex;
+  gap: var(--space-7);
+  margin-top: var(--space-6);
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--color-border);
+}
+
+.perfil-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.perfil-stats strong { font-size: var(--fs-lg); }
+
+.perfil-tabs {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.perfil-tabs a {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid transparent;
+}
+
+.perfil-tabs a.is-active,
+.perfil-tabs a:hover {
+  color: var(--color-text);
+  border-bottom-color: var(--color-primary);
+}
+
+/* aviso de "precisa estar logado", aparece no lugar do
+   conteúdo quando ninguém "logou" ainda ( main.js) */
+.auth-gate {
+  max-width: 480px;
+  margin: var(--space-8) auto;
+  text-align: center;
+  padding: var(--space-7) var(--space-5);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.auth-gate__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-5);
+}
+
+.auth-gate h2 {
+  font-size: var(--fs-md);
+  margin-bottom: var(--space-2);
+}
+
+/* rodapé */
+.footer {
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-7);
+  text-align: center;
+  font-size: var(--fs-xs);
+}
