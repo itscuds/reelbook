@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReelBook — Ferramenta de desenvolvimento</title>
+  <link rel="icon" href="assets/images/logo-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+
+  <!-- ESTA PÁGINA NÃO FAZ PARTE DO SITE.
+    é apenas pra simular "usuário logado". Não tem link pra ela em
+    nenhuma página e será apagada quando o login estiver pronto.
+  -->
+  <main class="container section" style="max-width: 560px;">
+    <h1>🛠️ Ferramenta — simular login</h1>
+    <p class="text-muted" style="margin-top: 8px;">
+      Isso só altera um dado no navegador para testar as telas com usuário logado ou visitante. Não afeta outros usuários.
+    </p>
+
+    <div class="empty-state" id="status-atual" style="margin-top: 24px; text-align: left;"></div>
+
+    <div class="toolbar" style="margin-top: 24px;">
+      <button id="btn-login" class="btn btn--primary">Simular login</button>
+      <button id="btn-logout" class="btn btn--outline">Sair (simular visitante)</button>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <p class="text-faint" style="margin-bottom: 12px;">Ir direto para uma página:</p>
+      <div class="toolbar">
+        <a href="index.html" class="btn btn--outline btn--sm">Início</a>
+        <a href="pages/perfil.html" class="btn btn--outline btn--sm">Perfil</a>
+        <a href="pages/favoritos.html" class="btn btn--outline btn--sm">Favoritos</a>
+        <a href="pages/listas.html" class="btn btn--outline btn--sm">Listas</a>
+        <a href="pages/diario.html" class="btn btn--outline btn--sm">Diário</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    const USUARIO_TESTE = { nome: 'Lilith', avatarUrl: 'https://i.pravatar.cc/80?img=47' };
+
+    function atualizarStatus() {
+      const usuario = getUsuarioLogado();
+      const statusEl = document.getElementById('status-atual');
+      statusEl.textContent = usuario
+        ? `✅ Logado como: ${usuario.nome}`
+        : '👤 Visitante (não logado)';
+    }
+
+    document.getElementById('btn-login').addEventListener('click', () => {
+      definirUsuarioLogado(USUARIO_TESTE);
+      atualizarStatus();
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      definirUsuarioLogado(null);
+      atualizarStatus();
+    });
+
+    atualizarStatus();
+  </script>
+</body>
+</html>

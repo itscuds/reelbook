@@ -1,0 +1,11 @@
+# Editor
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Futuro backend (Node.js), se vier a ser usado
+node_modules/
+.env
