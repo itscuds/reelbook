@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReelBook — Minhas listas</title>
+  <link rel="icon" href="../assets/images/logo-icon.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body data-page="listas" data-basepath="../">
+
+  <header id="app-navbar" class="navbar container"></header>
+
+  <!--
+    Estella esta pg está com o layout pronto e listas "falsas"
+    (ver o <script> no fim). Falta implementar:
+      - criar/editar/excluir listas de verdade (banco de dados)
+      - o botão "Nova lista" hoje não faz nada
+      - abrir uma lista e ver os filmes dentro dela
+  -->
+  <main id="main-conteudo" class="container section">
+    <div class="section__header">
+      <h1>Minhas listas</h1>
+      <button class="btn btn--primary" disabled>+ Nova lista</button>
+    </div>
+
+    <div id="listas-container" class="lista-collection"></div>
+  </main>
+
+  <footer class="footer container">
+    <p class="text-faint">© 2025 ReelBook — Projeto acadêmico.</p>
+  </footer>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // essa tela exige "login" (mock) — ver README para testar.
+    // substituir MOCK_LISTAS por listas reais do banco de dados.
+    const MOCK_LISTAS = [
+      { nome: 'Filmes para assistir', total: 15, capas: MOCK_MOVIES.slice(0, 4) },
+      { nome: 'Favoritos da vida', total: 28, capas: MOCK_MOVIES.slice(2, 6) },
+      { nome: 'Clássicos', total: 10, capas: MOCK_MOVIES.slice(1, 5) },
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const logado = protegerPagina('main-conteudo', '../');
+      if (!logado) return;
+
+      const container = document.getElementById('listas-container');
+      container.innerHTML = MOCK_LISTAS.map(lista => `
+        <div class="lista-card">
+          <div class="lista-card__info">
+            <p class="lista-card__nome">${lista.nome}</p>
+            <p class="text-faint">${lista.total} filmes</p>
+          </div>
+          <div class="lista-card__capas">
+            ${lista.capas.map(f => `<img src="${f.posterUrl}" alt="" />`).join('')}
+          </div>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReelBook — Diário</title>
+  <link rel="icon" href="../assets/images/logo-icon.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body data-page="diario" data-basepath="../">
+
+  <header id="app-navbar" class="navbar container"></header>
+
+  <!--
+    Oswaldo esta tela está com o layout pronto e registros falsos
+    (ver o <script> no fim). Falta implementar:
+      - salvar registros reais quando o usuário marca um filme como assistido
+      - editar/excluir um registro do diário
+      - conectar ao banco de dados do projeto
+  -->
+  <main id="main-conteudo" class="container section">
+    <h1>Diário</h1>
+
+    <div id="diario-lista" class="diario-lista"></div>
+  </main>
+
+  <footer class="footer container">
+    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+  </footer>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // essa tela exige "login" para testar no dev-login.
+    // substituir MOCK_DIARIO por registros reais do banco de dados.
+    const MOCK_DIARIO = [
+      { filme: MOCK_MOVIES[3], data: '02/05/2024', comentario: 'Filme incrível! Atuações e direção impecáveis.' },
+      { filme: MOCK_MOVIES[2], data: '28/04/2024', comentario: 'Visualmente lindo e uma história muito original.' },
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const logado = protegerPagina('main-conteudo', '../');
+      if (!logado) return;
+
+      const container = document.getElementById('diario-lista');
+      container.innerHTML = MOCK_DIARIO.map(registro => `
+        <div class="diario-item">
+          <img class="diario-item__poster" src="${registro.filme.posterUrl}" alt="Pôster de ${registro.filme.title}" />
+          <div class="diario-item__info">
+            <p class="diario-item__titulo">${registro.filme.title} <span class="text-faint">(${registro.filme.year})</span></p>
+            <p class="movie-card__rating">★ ${formatarNota(registro.filme.rating)}</p>
+            <p class="text-muted">${registro.comentario}</p>
+          </div>
+          <span class="text-faint">${registro.data}</span>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>
