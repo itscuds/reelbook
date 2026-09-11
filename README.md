@@ -44,3 +44,25 @@ O ReelBook foi pensado para tornar a experiência de descobrir e acompanhar film
 # Modelo de Dados (MER)
 
 O Modelo Entidade-Relacionamento do banco está em [docs/mer.md](docs/mer.md): o diagrama das 6 tabelas e a justificativa de cada uma.
+
+# Páginas do Reelbook
+
+- Tela inicial
+
+![tela-inicial](/prototipos/tela-inicial.png)
+
+- Perfil
+
+![perfil](/prototipos/perfil.png)
+
+- Favoritos
+
+![favoritos](/prototipos/favoritos.png)
+
+- Lista de Filmes
+
+![lista-filmes](/prototipos/lista-filmes.png)
+
+- Diário
+
+![Diario](/prototipos/diario.png)
