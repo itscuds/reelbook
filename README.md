@@ -41,7 +41,6 @@ O ReelBook foi pensado para tornar a experiência de descobrir e acompanhar film
 15. Visualizar avaliações — Exibir notas e comentários de outros usuários.
 
 
+# Modelo de Dados (MER)
 
-# Testando Commit
-
-Um breve teste de commit
+O Modelo Entidade-Relacionamento do banco está em [docs/mer.md](docs/mer.md): o diagrama das 6 tabelas e a justificativa de cada uma.
