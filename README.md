@@ -5,7 +5,6 @@
 - João Victor de Jesus Silva
 - Nicolle Lima
 - Estella Garcia
-- Oswaldo Rocha
 
 
 # Descrição sobre o projeto
@@ -16,10 +15,9 @@ O ReelBook foi pensado para tornar a experiência de descobrir e acompanhar film
 
 # Divisão de Tarefas
 
-- Nicolle + Página inicial e identidade visual 
-- João    + Página de filmes e integração com API 
-- Estella + Listas, favoritos e LocalStorage 
-- Oswaldo + Diário, perfil e responsividade 
+Nicolle : Página inicial, identidade visual e responsividade 
+João    : PPágina de filmes, integração com API e perfil do usuário 
+Estella : Listas, favoritos, LocalStorage e diário  
 
 
 # Funcionalidades
