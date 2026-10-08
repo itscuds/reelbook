@@ -15,9 +15,9 @@ O ReelBook foi pensado para tornar a experiência de descobrir e acompanhar film
 
 # Divisão de Tarefas
 
-Nicolle : Página inicial, identidade visual e responsividade 
-João    : PPágina de filmes, integração com API e perfil do usuário 
-Estella : Listas, favoritos, LocalStorage e diário  
+- Nicolle: Página inicial, identidade visual e responsividade 
+- João: Página de filmes, integração com API e perfil do usuário 
+- Estella: Listas, favoritos, LocalStorage e diário  
 
 
 # Funcionalidades
