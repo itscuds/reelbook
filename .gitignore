@@ -9,3 +9,8 @@ Thumbs.db
 # Futuro backend (Node.js), se vier a ser usado
 node_modules/
 .env
+*.iml
+out/
+target/
+*.mv.db
+*.trace.db
