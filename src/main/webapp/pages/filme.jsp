@@ -1,0 +1,79 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReelBook — Detalhes do filme</title>
+  <link rel="icon" href="../assets/images/logo-icon.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body data-page="filme" data-basepath="../">
+
+  <header id="app-navbar" class="navbar container"></header>
+
+  <!--
+    João aqui tá com um filme fixo só pra mostrar como fica o
+    layout. Falta:
+      - pegar o id do filme pela URL (dá pra usar URLSearchParams)
+      - buscar os dados de verdade na API
+     (ou nāo) do TMDb (sinopse, elenco, direção)
+      - as avaliações de usuário vêm do banco de dados do projeto, não da API
+    os botões "Avaliar", "Favoritar" e "Marcar como assistido" tb não
+    fazem nada ainda, isso é junto com favoritos/diário
+  -->
+  <main class="container section movie-detail">
+    <div class="movie-detail__poster">
+      <img id="filme-poster" src="" alt="" />
+    </div>
+
+    <div class="movie-detail__info">
+      <h1 id="filme-titulo"></h1>
+      <p id="filme-info" class="text-muted"></p>
+      <p id="filme-nota" class="movie-card__rating" style="font-size: var(--fs-md); margin-top: 8px;"></p>
+
+      <div class="toolbar" style="margin-top: var(--space-5);">
+      <button class="btn btn--primary" disabled>Avaliar</button>
+      <button class="btn btn--outline" disabled>+ Favoritar</button>
+      <button class="btn btn--outline" disabled>✓ Marcar como assistido</button>
+      </div>
+
+      <p id="filme-sinopse" style="margin-top: var(--space-6); max-width: 60ch;"></p>
+
+      <div class="movie-detail__meta" style="margin-top: var(--space-6);">
+
+      <div class="movie-detail__meta" style="margin-top: var(--space-6);">
+        <div>
+          <p class="text-faint">Direção</p>
+          <p id="filme-diretor"></p>
+        </div>
+
+        <div>
+          <p class="text-faint">Roteiro</p>
+          <p id="filme-roteiro"></p>
+        </div>
+
+        <div>
+          <p class="text-faint">País</p>
+          <p id="filme-pais"></p>
+        </div>
+
+      <div style="margin-top: var(--space-6);">
+        <p class="text-faint" style="margin-bottom: var(--space-3);">Avaliações</p>
+        <div class="empty-state">
+          As avaliações de outros usuários vão aparecer aqui quando o banco de dados estiver conectado.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer container">
+    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+  </footer>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/filme.js"></script>
+</body>
+</html>
