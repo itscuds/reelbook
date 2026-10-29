@@ -1,62 +1,106 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%@ page contentType="text/html;charset=UTF-8"
+         pageEncoding="UTF-8"
+         isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ReelBook — Diário</title>
-  <link rel="icon" href="../assets/images/logo-icon.png" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/components.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReelBook — Diário</title>
+    <link rel="icon" href="../assets/images/logo-icon.png" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/components.css" />
 </head>
+
 <body data-page="diario" data-basepath="../">
 
-  <header id="app-navbar" class="navbar container"></header>
+    <header id="app-navbar" class="navbar container"></header>
 
-  <!--
-    Felipe esta tela está com o layout pronto e registros falsos
-    (ver o <script> no fim). Falta implementar:
-      - salvar registros reais quando o usuário marca um filme como assistido
-      - editar/excluir um registro do diário
-      - conectar ao banco de dados do projeto
-  -->
-  <main id="main-conteudo" class="container section">
-    <h1>Diário</h1>
+    <main id="main-conteudo" class="container section">
+        <h1>Diário</h1>
 
-    <div id="diario-lista" class="diario-lista"></div>
-  </main>
+        <div id="diario-lista" class="diario-lista">
 
-  <footer class="footer container">
-    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
-  </footer>
+            <%
+                java.util.List<br.com.reelbook.model.RegistroPessoalDTO> registros =
+                    (java.util.List<br.com.reelbook.model.RegistroPessoalDTO>)
+                    request.getAttribute("registros");
 
-  <script src="../js/components.js"></script>
-  <script src="../js/main.js"></script>
-  <script>
-    // essa tela exige "login" para testar no dev-login.
-    // substituir MOCK_DIARIO por registros reais do banco de dados.
-    const MOCK_DIARIO = [
-      { filme: MOCK_MOVIES[3], data: '02/05/2024', comentario: 'Filme incrível! Atuações e direção impecáveis.' },
-      { filme: MOCK_MOVIES[2], data: '28/04/2024', comentario: 'Visualmente lindo e uma história muito original.' },
-    ];
+                boolean encontrou = false;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const logado = protegerPagina('main-conteudo', '../');
-      if (!logado) return;
+                if (registros != null) {
+                    for (br.com.reelbook.model.RegistroPessoalDTO item : registros) {
+                        String status = item.getRegistro().getStatus();
 
-      const container = document.getElementById('diario-lista');
-      container.innerHTML = MOCK_DIARIO.map(registro => `
-        <div class="diario-item">
-          <img class="diario-item__poster" src="${registro.filme.posterUrl}" alt="Pôster de ${registro.filme.title}" />
-          <div class="diario-item__info">
-            <p class="diario-item__titulo">${registro.filme.title} <span class="text-faint">(${registro.filme.year})</span></p>
-            <p class="movie-card__rating">★ ${formatarNota(registro.filme.rating)}</p>
-            <p class="text-muted">${registro.comentario}</p>
-          </div>
-          <span class="text-faint">${registro.data}</span>
+                        if (status == null || !"ASSISTIDO".equalsIgnoreCase(status)) {
+                            continue;
+                        }
+
+                        encontrou = true;
+
+                        br.com.reelbook.model.Filme filme = item.getFilme();
+                        java.math.BigDecimal nota = item.getRegistro().getNota();
+                        java.time.LocalDate data = item.getRegistro().getDataRegistro();
+            %>
+
+            <article class="diario-item">
+
+                <img
+                    class="diario-item__poster"
+                    src="<%= filme.getPosterUrl() == null ? "" : filme.getPosterUrl() %>"
+                    alt="Pôster de <%= filme.getTitulo() %>"
+                    loading="lazy"
+                />
+
+                <div class="diario-item__info">
+
+                    <p class="diario-item__titulo">
+                        <%= filme.getTitulo() %>
+                        <span class="text-faint">(<%= filme.getAno() %>)</span>
+                    </p>
+
+                    <% if (nota != null) { %>
+                        <p class="movie-card__rating">
+                            ★ <%= nota.stripTrailingZeros().toPlainString() %>
+                        </p>
+                    <% } %>
+
+                    <p class="text-muted">
+                        Filme marcado como assistido.
+                    </p>
+
+                </div>
+
+                <span class="text-faint">
+                    <%= data == null ? "Data não informada" : data.toString() %>
+                </span>
+
+            </article>
+
+            <%
+                    }
+                }
+
+                if (!encontrou) {
+            %>
+
+                <p class="text-muted">
+                    Seu diário ainda está vazio. Quando você marcar um filme como assistido, ele aparecerá aqui.
+                </p>
+
+            <%
+                }
+            %>
+
         </div>
-      `).join('');
-    });
-  </script>
+    </main>
+
+    <footer class="footer container">
+        <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+    </footer>
+
+    <script src="../js/components.js"></script>
+    <script src="../js/main.js"></script>
+
 </body>
 </html>
