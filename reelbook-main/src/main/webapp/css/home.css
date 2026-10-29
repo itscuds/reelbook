@@ -1,0 +1,51 @@
+/* 
+   home.css — css da página inicial  */
+
+.hero {
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  margin-top: var(--space-6);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-bg-elevated);
+  background-image:
+    linear-gradient(180deg, rgba(13,13,20,0.35) 0%, rgba(13,13,20,0.95) 100%),
+    radial-gradient(circle at 80% 20%, rgba(139,92,246,0.25), transparent 60%);
+  padding-inline: var(--space-7);
+}
+
+.hero__content {
+  max-width: 620px;
+}
+
+.hero__logo {
+  width: min(420px, 80%);
+  height: auto;
+  margin-bottom: var(--space-6);
+}
+
+.hero__content h1 {
+  font-size: var(--fs-2xl);
+  color: var(--color-primary-light);
+  margin-bottom: var(--space-3);
+}
+
+.hero__content p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-md);
+  margin-bottom: var(--space-6);
+}
+
+.hero__actions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .hero { min-height: 320px; padding-inline: var(--space-4); }
+  .hero__logo { width: min(280px, 90%); margin-bottom: var(--space-4); }
+  .hero__content h1 { font-size: var(--fs-xl); }
+  .hero__actions { flex-direction: column; }
+}
