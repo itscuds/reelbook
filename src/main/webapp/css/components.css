@@ -432,3 +432,42 @@
   text-align: center;
   font-size: var(--fs-xs);
 }
+/* responsividade geral: Perfil, Diário e Elementos de Tela */
+@media (max-width: 640px) {
+  .perfil-header {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .perfil-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .perfil-stats div {
+    min-width: 80px;
+    align-items: center;
+  }
+
+  .perfil-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: var(--space-2);
+    gap: var(--space-4);
+  }
+
+  .diario-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .diario-item__poster {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    aspect-ratio: 2/3;
+  }
+}
