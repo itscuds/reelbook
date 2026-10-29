@@ -1,6 +1,25 @@
+
 <%@ page contentType="text/html;charset=UTF-8"
          pageEncoding="UTF-8"
          isELIgnored="false" %>
+<%@ page import="br.com.reelbook.model.RegistroPessoalDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="br.com.reelbook.util.ConnectionFactory" %>
+
+<%
+    List<RegistroPessoalDTO> registros =
+        (List<RegistroPessoalDTO>) request.getAttribute("registros");
+
+    if (registros == null) {
+        response.sendRedirect(request.getContextPath()
+                + "/minha-lista?tipo=diario");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,96 +30,111 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/components.css" />
 </head>
-
 <body data-page="diario" data-basepath="../">
 
-    <header id="app-navbar" class="navbar container"></header>
+<header id="app-navbar" class="navbar container"></header>
 
-    <main id="main-conteudo" class="container section">
-        <h1>Diário</h1>
+<main id="main-conteudo" class="container section">
+    <h1>Diário</h1>
 
-        <div id="diario-lista" class="diario-lista">
+    <div class="diario-lista">
+        <%
+            boolean encontrou = false;
 
-            <%
-                java.util.List<br.com.reelbook.model.RegistroPessoalDTO> registros =
-                    (java.util.List<br.com.reelbook.model.RegistroPessoalDTO>)
-                    request.getAttribute("registros");
-
-                boolean encontrou = false;
-
-                if (registros != null) {
-                    for (br.com.reelbook.model.RegistroPessoalDTO item : registros) {
-                        String status = item.getRegistro().getStatus();
-
-                        if (status == null || !"ASSISTIDO".equalsIgnoreCase(status)) {
-                            continue;
-                        }
-
-                        encontrou = true;
-
-                        br.com.reelbook.model.Filme filme = item.getFilme();
-                        java.math.BigDecimal nota = item.getRegistro().getNota();
-                        java.time.LocalDate data = item.getRegistro().getDataRegistro();
-            %>
-
-            <article class="diario-item">
-
-                <img
-                    class="diario-item__poster"
-                    src="<%= filme.getPosterUrl() == null ? "" : filme.getPosterUrl() %>"
-                    alt="Pôster de <%= filme.getTitulo() %>"
-                    loading="lazy"
-                />
-
-                <div class="diario-item__info">
-
-                    <p class="diario-item__titulo">
-                        <%= filme.getTitulo() %>
-                        <span class="text-faint">(<%= filme.getAno() %>)</span>
-                    </p>
-
-                    <% if (nota != null) { %>
-                        <p class="movie-card__rating">
-                            ★ <%= nota.stripTrailingZeros().toPlainString() %>
-                        </p>
-                    <% } %>
-
-                    <p class="text-muted">
-                        Filme marcado como assistido.
-                    </p>
-
-                </div>
-
-                <span class="text-faint">
-                    <%= data == null ? "Data não informada" : data.toString() %>
-                </span>
-
-            </article>
-
-            <%
-                    }
+            for (RegistroPessoalDTO item : registros) {
+                if (item.getRegistro().getStatus() == null
+                        || !"ASSISTIDO".equalsIgnoreCase(
+                            item.getRegistro().getStatus())) {
+                    continue;
                 }
 
-                if (!encontrou) {
-            %>
+                encontrou = true;
 
-                <p class="text-muted">
-                    Seu diário ainda está vazio. Quando você marcar um filme como assistido, ele aparecerá aqui.
+                int idFilme = item.getFilme().getIdFilme();
+                String comentario = null;
+
+                try (Connection conn = ConnectionFactory.getConnection();
+                     PreparedStatement ps = conn.prepareStatement(
+                         "SELECT TEXTO FROM RESENHA "
+                         + "WHERE ID_USUARIO = ? AND ID_FILME = ?")) {
+
+                    ps.setInt(1, item.getRegistro().getIdUsuario());
+                    ps.setInt(2, idFilme);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            comentario = rs.getString("TEXTO");
+                        }
+                    }
+                } catch (Exception e) {
+                    application.log("Erro ao carregar comentário do diário", e);
+                }
+
+                String titulo = item.getFilme().getTitulo();
+                BigDecimal nota = item.getRegistro().getNota();
+                java.time.LocalDate data =
+                    item.getRegistro().getDataRegistro();
+        %>
+        <article class="diario-item">
+            <img class="diario-item__poster"
+                 src="<%= item.getFilme().getPosterUrl() == null
+                     ? "" : item.getFilme().getPosterUrl() %>"
+                 alt="Pôster de <%= titulo %>"
+                 loading="lazy" />
+
+            <div class="diario-item__info">
+                <p class="diario-item__titulo">
+                    <%= titulo %>
+                    <span class="text-faint">
+                        (<%= item.getFilme().getAno() %>)
+                    </span>
                 </p>
 
-            <%
-                }
-            %>
+                <p class="movie-card__rating">
+                    ★ <%= nota == null ? "Sem nota"
+                        : nota.stripTrailingZeros().toPlainString() %>
+                </p>
 
-        </div>
-    </main>
+                <p class="text-muted">
+                    <%= comentario == null ? "" : comentario %>
+                </p>
 
-    <footer class="footer container">
-        <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
-    </footer>
+                <form action="<%= request.getContextPath() %>/registro-pessoal"
+                      method="post">
+                    <input type="hidden" name="acao" value="remover" />
+                    <input type="hidden" name="idFilme"
+                           value="<%= idFilme %>" />
+                    <button type="submit" class="btn btn--outline btn--sm"
+                            onclick="return confirm('Deseja remover este registro?')">
+                        Excluir
+                    </button>
+                </form>
+            </div>
 
-    <script src="../js/components.js"></script>
-    <script src="../js/main.js"></script>
+            <span class="text-faint">
+                <%= data == null ? "Data não informada" : data %>
+            </span>
+        </article>
+        <%
+            }
 
+            if (!encontrou) {
+        %>
+            <p class="text-muted">
+                Seu diário ainda está vazio. Quando marcar um filme
+                como assistido, ele aparecerá aqui.
+            </p>
+        <%
+            }
+        %>
+    </div>
+</main>
+
+<footer class="footer container">
+    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+</footer>
+
+<script src="../js/components.js"></script>
+<script src="../js/main.js"></script>
 </body>
 </html>
