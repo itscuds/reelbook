@@ -11,11 +11,17 @@ public class Usuario {
     private LocalDate dataCadastro;
     private boolean ativo;
 
-    public Usuario() {}
-
-    public Usuario(String trim, String trim1, String senha) {
+    public Usuario() {
     }
 
+    public Usuario(String nome, String email, String senhaHash) {
+        this.nome = nome;
+        this.email = email;
+        this.senhaHash = senhaHash;
+        this.perfil = "USUARIO";
+        this.dataCadastro = LocalDate.now();
+        this.ativo = true;
+    }
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
