@@ -1,18 +1,16 @@
+
 /* =============================================================
    main.js — carrega em toda página do site
 
-   O que tem aqui:
-     1. os filmes falsos (até conectar a API de verdade)
-     2. um "login" falso guardado no localStorage, só pra dar pra
-        testar como fica logado x visitante
-     3. o bootstrap que chama a navbar quando a página carrega
-
-   nada disso é definitivo
+   1. Filmes falsos (até conectar a API de verdade)
+   2. Autenticação pela sessão HTTP do Tomcat
+   3. Bootstrap da navbar quando a página carrega
    ============================================================= */
 
-// Joāo trocar isso pelos dados de verdade da API do TMDb —
-// só mantém o mesmo formato (id, title, year, rating, posterUrl)
-// que os cards continuam funcionando sem precisar mexer em mais nada
+// =============================================================
+// FILMES DE DEMONSTRAÇÃO
+// =============================================================
+
 const MOCK_MOVIES = [
   {
     id: 1,
@@ -146,39 +144,90 @@ const MOCK_MOVIES = [
   }
 ];
 
+// =============================================================
+// AUTENTICAÇÃO REAL
+// Consulta a sessão HTTP do Tomcat
+// =============================================================
 
-// quando o login de verdade existir, é só trocar
-// essas duas funções aqui embaixo
+let usuarioAtual = null;
 
-// pra testar sem mexer no código: abre o arquivo dev-login.html
-const AUTH_STORAGE_KEY = 'reelbook_mock_user';
-
+// Retorna o usuário da sessão atual
 function getUsuarioLogado() {
-  const salvo = localStorage.getItem(AUTH_STORAGE_KEY);
-  return salvo ? JSON.parse(salvo) : null; // null = visitante (não logado)
+  return usuarioAtual;
 }
 
-function definirUsuarioLogado(usuario) {
-  if (usuario) {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(usuario));
-  } else {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+// Consulta o servidor para verificar se existe uma sessão ativa
+async function carregarSessao() {
+
+  const basePath = document.body.dataset.basepath || '';
+
+  try {
+
+    const resposta = await fetch(`${basePath}sessao`, {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao consultar a sessão.');
+    }
+
+    const dados = await resposta.json();
+
+    if (dados.logado) {
+
+      usuarioAtual = {
+        id: dados.id,
+        nome: dados.nome
+      };
+
+    } else {
+
+      usuarioAtual = null;
+
+    }
+
+  } catch (erro) {
+
+    console.error('Erro ao carregar sessão:', erro);
+    usuarioAtual = null;
+
   }
+
+  const page = document.body.dataset.page || '';
+
+  // Atualiza a navbar com o estado real da sessão
+  renderNavbar({
+    basePath: basePath,
+    activePage: page,
+    usuario: usuarioAtual
+  });
+
+  // Avisa os outros scripts que a sessão foi carregada
+  document.dispatchEvent(
+      new CustomEvent('sessaoCarregada', {
+        detail: {
+          usuario: usuarioAtual
+        }
+      })
+  );
 }
+
+// =============================================================
+// FORMATAÇÃO
+// =============================================================
 
 function formatarNota(nota) {
-  return typeof nota === 'number' ? nota.toFixed(1) : '—';
+  return typeof nota === 'number'
+      ? nota.toFixed(1)
+      : '—';
 }
 
-// isso roda em toda página assim que carrega: pega o data-page e o
-// data-basepath que tão no <body> e manda a navbar se montar
-// (a função renderNavbar em components.js)
-document.addEventListener('DOMContentLoaded', () => {
-  const { page = '', basepath = '' } = document.body.dataset;
+// =============================================================
+// INICIALIZAÇÃO
+// =============================================================
 
-  renderNavbar({
-    basePath: basepath,
-    activePage: page,
-    usuario: getUsuarioLogado(),
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  carregarSessao();
 });

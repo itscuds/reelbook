@@ -1,61 +1,102 @@
+
 const MOCK_LISTAS = [
-  { nome: 'Filmes para assistir', total: 15, capas: MOCK_MOVIES.slice(0, 4) },
-  { nome: 'Favoritos da vida', total: 28, capas: MOCK_MOVIES.slice(2, 6) },
-  { nome: 'Clássicos', total: 10, capas: MOCK_MOVIES.slice(1, 5) },
+  {
+    nome: 'Filmes para assistir',
+    total: 15,
+    capas: MOCK_MOVIES.slice(0, 4)
+  },
+  {
+    nome: 'Favoritos da vida',
+    total: 28,
+    capas: MOCK_MOVIES.slice(2, 6)
+  },
+  {
+    nome: 'Clássicos',
+    total: 10,
+    capas: MOCK_MOVIES.slice(1, 5)
+  }
 ];
 
+// Recupera as listas salvas
 const listasSalvas = localStorage.getItem('listas');
 
 let listas = listasSalvas
-  ? JSON.parse(listasSalvas)
-  : [...MOCK_LISTAS];
+    ? JSON.parse(listasSalvas)
+    : [...MOCK_LISTAS];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const logado = protegerPagina('main-conteudo', '../');
+// Salva as listas no navegador
+function salvarListas() {
+  localStorage.setItem('listas', JSON.stringify(listas));
+}
 
-  if (!logado) return;
+// Renderiza todas as listas
+function renderizarListas() {
 
   const container = document.getElementById('listas-container');
 
+  if (!container) return;
+
   container.innerHTML = listas.map(lista => `
     <div class="lista-card">
+
       <div class="lista-card__info">
-        <p class="lista-card__nome">${lista.nome}</p>
-        <p class="text-faint">${lista.total} filmes</p>
+
+        <p class="lista-card__nome">
+          ${lista.nome}
+        </p>
+
+        <p class="text-faint">
+          ${lista.total} filmes
+        </p>
+
       </div>
 
       <div class="lista-card__capas">
-        ${lista.capas.map(f => `<img src="${f.posterUrl}" alt="" />`).join('')}
+
+        ${lista.capas.map(filme => `
+          <img src="${filme.posterUrl}" alt="" />
+        `).join('')}
+
       </div>
+
     </div>
   `).join('');
-});
+}
 
-const botaoNovaLista = document.getElementById('btn-nova-lista');
+// Inicialização da página
+document.addEventListener('DOMContentLoaded', () => {
 
-botaoNovaLista.addEventListener('click', () => {
-  const nomeLista = prompt('Digite o nome da nova lista:');
+  const container = document.getElementById('listas-container');
 
-  if (nomeLista) {
-    listas.push({
-      nome: nomeLista,
-      total: 0,
-      capas: []
+  if (!container) return;
+
+  // Renderiza as listas existentes
+  renderizarListas();
+
+  // Botão para criar uma nova lista
+  const botaoNovaLista = document.getElementById('btn-nova-lista');
+
+  if (botaoNovaLista) {
+
+    botaoNovaLista.addEventListener('click', () => {
+
+      const nomeLista = prompt('Digite o nome da nova lista:');
+
+      if (!nomeLista || !nomeLista.trim()) return;
+
+      // Adiciona a nova lista
+      listas.push({
+        nome: nomeLista.trim(),
+        total: 0,
+        capas: []
+      });
+
+      // Salva e atualiza a tela
+      salvarListas();
+      renderizarListas();
+
     });
 
-    localStorage.setItem('listas', JSON.stringify(listas));
-
-    const novaLista = document.createElement('div');
-
-    novaLista.classList.add('lista-card');
-
-    novaLista.innerHTML = `
-      <div class="lista-card__info">
-        <p class="lista-card__nome">${nomeLista}</p>
-        <p class="text-faint">0 filmes</p>
-      </div>
-    `;
-
-    document.getElementById('listas-container').appendChild(novaLista);
   }
+
 });
