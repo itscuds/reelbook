@@ -1,3 +1,4 @@
+
 package br.com.reelbook.servlet;
 
 import br.com.reelbook.dao.UsuarioDAO;
@@ -51,13 +52,16 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
 
+            HttpSession sessaoAntiga = request.getSession(false);
+
+            if (sessaoAntiga != null) {
+                sessaoAntiga.invalidate();
+            }
+
             HttpSession sessao = request.getSession(true);
 
-            // Evita reutilizar a sessão anterior após o login.
-            request.changeSessionId();
-
             sessao.setAttribute("usuarioLogado", usuario);
-            sessao.setAttribute("idUsuario", usuario.getId());
+            sessao.setAttribute("usuarioId", usuario.getId());
 
             response.sendRedirect(request.getContextPath() + "/");
 
