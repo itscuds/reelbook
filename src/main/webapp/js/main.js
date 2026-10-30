@@ -1,8 +1,7 @@
-
 /* =============================================================
    main.js — carrega em toda página do site
 
-   1. Filmes falsos (até conectar a API de verdade)
+   1. Filmes de demonstração
    2. Autenticação pela sessão HTTP do Tomcat
    3. Bootstrap da navbar quando a página carrega
    ============================================================= */
@@ -145,66 +144,53 @@ const MOCK_MOVIES = [
 ];
 
 // =============================================================
-// AUTENTICAÇÃO REAL
-// Consulta a sessão HTTP do Tomcat
+// AUTENTICAÇÃO REAL — SESSÃO HTTP DO TOMCAT
 // =============================================================
 
 let usuarioAtual = null;
 
-// Retorna o usuário da sessão atual
 function getUsuarioLogado() {
   return usuarioAtual;
 }
 
-// Consulta o servidor para verificar se existe uma sessão ativa
 async function carregarSessao() {
-
   const basePath = document.body.dataset.basepath || '';
+  const page = document.body.dataset.page || '';
 
   try {
-
     const resposta = await fetch(`${basePath}sessao`, {
-      method: 'GET',
       credentials: 'same-origin',
       cache: 'no-store'
     });
 
     if (!resposta.ok) {
-      throw new Error('Erro ao consultar a sessão.');
+      throw new Error(`HTTP ${resposta.status}`);
     }
 
     const dados = await resposta.json();
 
-    if (dados.logado) {
-
-      usuarioAtual = {
-        id: dados.id,
-        nome: dados.nome
-      };
-
-    } else {
-
-      usuarioAtual = null;
-
-    }
+    usuarioAtual = dados && dados.logado
+        ? {
+          id: dados.id,
+          nome: dados.nome
+        }
+        : null;
 
   } catch (erro) {
+    console.error(
+        'Não foi possível consultar a sessão:',
+        erro
+    );
 
-    console.error('Erro ao carregar sessão:', erro);
     usuarioAtual = null;
-
   }
 
-  const page = document.body.dataset.page || '';
-
-  // Atualiza a navbar com o estado real da sessão
   renderNavbar({
-    basePath: basePath,
+    basePath,
     activePage: page,
     usuario: usuarioAtual
   });
 
-  // Avisa os outros scripts que a sessão foi carregada
   document.dispatchEvent(
       new CustomEvent('sessaoCarregada', {
         detail: {
@@ -214,20 +200,13 @@ async function carregarSessao() {
   );
 }
 
-// =============================================================
-// FORMATAÇÃO
-// =============================================================
-
 function formatarNota(nota) {
   return typeof nota === 'number'
       ? nota.toFixed(1)
       : '—';
 }
 
-// =============================================================
-// INICIALIZAÇÃO
-// =============================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  carregarSessao();
-});
+document.addEventListener(
+    'DOMContentLoaded',
+    carregarSessao
+);

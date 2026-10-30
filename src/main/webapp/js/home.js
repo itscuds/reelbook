@@ -1,35 +1,23 @@
-
-// =============================================================
-// home.js
-// Lógica da página inicial
-// =============================================================
-
 document.addEventListener('DOMContentLoaded', () => {
-
-  renderizarFilmesEmDestaque();
-
+  carregarDestaques();
 });
 
-// Aguarda a consulta da sessão real
 document.addEventListener('sessaoCarregada', () => {
-
   renderizarHero();
-
 });
 
-// Renderiza a mensagem de boas-vindas
 function renderizarHero() {
-
   const heroText = document.getElementById('hero-text');
 
-  if (!heroText) return;
+  if (!heroText) {
+    return;
+  }
 
   const usuario = getUsuarioLogado();
 
   if (usuario) {
-
     heroText.innerHTML = `
-      <h1>Bem-vindo de volta, ${usuario.nome}!</h1>
+      <h1>Bem-vindo de volta, ${escaparHTML(usuario.nome)}!</h1>
 
       <p>
         Continue de onde parou: descubra, organize e compartilhe
@@ -37,22 +25,16 @@ function renderizarHero() {
       </p>
 
       <div class="hero__actions">
-
-        <a href="pages/explorar.jsp"
-           class="btn btn--primary">
+        <a href="filmes?acao=explorar" class="btn btn--primary">
           Explorar filmes
         </a>
 
-        <a href="pages/listas.jsp"
-           class="btn btn--outline">
+        <a href="pages/listas.jsp" class="btn btn--outline">
           Minhas listas
         </a>
-
       </div>
     `;
-
   } else {
-
     heroText.innerHTML = `
       <h1>
         Descubra, avalie e organize os filmes que você assiste
@@ -64,28 +46,57 @@ function renderizarHero() {
       </p>
 
       <div class="hero__actions">
-
-        <a href="pages/cadastro.jsp"
-           class="btn btn--primary">
+        <a href="pages/cadastro.jsp" class="btn btn--primary">
           Criar conta
         </a>
 
-        <a href="pages/explorar.jsp"
-           class="btn btn--outline">
+        <a href="filmes?acao=explorar" class="btn btn--outline">
           Explorar sem cadastro
         </a>
-
       </div>
     `;
-
   }
 }
 
-// Renderiza os filmes em destaque
-function renderizarFilmesEmDestaque() {
-
+async function carregarDestaques() {
   const grid = document.getElementById('destaque-grid');
 
-  renderMovieGrid(grid, MOCK_MOVIES, '');
+  if (!grid) {
+    return;
+  }
 
+  try {
+    const resposta = await fetch(
+        'filmes?acao=json',
+        {
+          cache: 'no-store'
+        }
+    );
+
+    if (!resposta.ok) {
+      throw new Error(`HTTP ${resposta.status}`);
+    }
+
+    const dados = await resposta.json();
+
+    renderMovieGrid(
+        grid,
+        (dados.filmes || []).slice(0, 6),
+        ''
+    );
+
+  } catch (erro) {
+    console.error(
+        'Erro ao carregar filmes da Home:',
+        erro
+    );
+
+    // Mantém o conteúdo demonstrativo visível
+    // caso o banco esteja indisponível.
+    renderMovieGrid(
+        grid,
+        MOCK_MOVIES.slice(0, 6),
+        ''
+    );
+  }
 }

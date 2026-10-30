@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -10,10 +9,15 @@
 
     <title>ReelBook — <c:out value="${filme.titulo}"/></title>
 
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/components.css">
+    <link
+        rel="stylesheet"
+        href="${pageContext.request.contextPath}/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="${pageContext.request.contextPath}/css/components.css"
+    >
 
     <style>
         .detail {
@@ -90,33 +94,51 @@
     </style>
 </head>
 
-<body>
+<body
+    data-page="detalhe"
+    data-basepath="${pageContext.request.contextPath}/"
+>
+
+<header id="app-navbar" class="navbar container"></header>
+
 <main class="detail">
 
     <div>
-        <a class="back"
-           href="${pageContext.request.contextPath}/filmes">
+
+        <a
+            class="back"
+            href="${pageContext.request.contextPath}/filmes"
+        >
             ← Voltar ao catálogo
         </a>
 
         <c:choose>
             <c:when test="${not empty filme.posterUrl}">
-                <img class="poster"
-                     src="<c:out value='${filme.posterUrl}'/>"
-                     alt="Pôster de <c:out value='${filme.titulo}'/>"
-                     onerror="this.style.display='none'">
+                <img
+                    class="poster"
+                    src="<c:out value='${filme.posterUrl}'/>"
+                    alt="Pôster de <c:out value='${filme.titulo}'/>"
+                    onerror="this.style.display='none'"
+                >
             </c:when>
+
             <c:otherwise>
-                <div class="poster" aria-label="Pôster indisponível"></div>
+                <div
+                    class="poster"
+                    aria-label="Pôster indisponível"
+                ></div>
             </c:otherwise>
         </c:choose>
+
     </div>
 
     <section class="info">
 
-        <p class="text-faint">DETALHES DO FILME</p>
+        <p class="text-faint">
+            DETALHES DO FILME
+        </p>
 
-        <h1 style="margin:8px 0 12px">
+        <h1 style="margin: 8px 0 12px">
             <c:out value="${filme.titulo}"/>
         </h1>
 
@@ -128,72 +150,161 @@
 
         <div>
             <c:forEach var="g" items="${filme.generos}">
-                <span class="tag"><c:out value="${g.nome}"/></span>
+                <span class="tag">
+                    <c:out value="${g.nome}"/>
+                </span>
             </c:forEach>
         </div>
 
-        <h2 style="margin-top:28px">Sinopse</h2>
+        <h2 style="margin-top: 28px">
+            Sinopse
+        </h2>
 
-        <p style="margin-top:10px;white-space:pre-line">
+        <p style="margin-top: 10px; white-space: pre-line">
             <c:choose>
                 <c:when test="${not empty filme.sinopse}">
                     <c:out value="${filme.sinopse}"/>
                 </c:when>
-                <c:otherwise>Sinopse ainda não cadastrada.</c:otherwise>
+
+                <c:otherwise>
+                    Sinopse ainda não cadastrada.
+                </c:otherwise>
             </c:choose>
         </p>
 
-        <h2 style="margin-top:28px">Minha lista pessoal</h2>
+        <h2 style="margin-top: 28px">
+            Minha lista pessoal
+        </h2>
 
         <div class="acoes">
 
-            <form action="${pageContext.request.contextPath}/registro-pessoal"
-                  method="post">
-                <input type="hidden" name="acao" value="adicionar">
-                <input type="hidden" name="idFilme"
-                       value="<c:out value='${filme.idFilme}'/>">
-                <button type="submit">+ Adicionar à minha lista</button>
+            <form
+                action="${pageContext.request.contextPath}/registro-pessoal"
+                method="post"
+            >
+                <input
+                    type="hidden"
+                    name="acao"
+                    value="adicionar"
+                >
+
+                <input
+                    type="hidden"
+                    name="idFilme"
+                    value="<c:out value='${filme.idFilme}'/>"
+                >
+
+                <button type="submit">
+                    + Adicionar à minha lista
+                </button>
             </form>
 
-            <form action="${pageContext.request.contextPath}/registro-pessoal"
-                  method="post">
-                <input type="hidden" name="acao" value="atualizar">
-                <input type="hidden" name="idFilme"
-                       value="<c:out value='${filme.idFilme}'/>">
-                <input type="hidden" name="status" value="ASSISTIDO">
-                <button type="submit">Marcar como assistido</button>
+            <form
+                action="${pageContext.request.contextPath}/registro-pessoal"
+                method="post"
+            >
+                <input
+                    type="hidden"
+                    name="acao"
+                    value="atualizar"
+                >
+
+                <input
+                    type="hidden"
+                    name="idFilme"
+                    value="<c:out value='${filme.idFilme}'/>"
+                >
+
+                <input
+                    type="hidden"
+                    name="status"
+                    value="ASSISTIDO"
+                >
+
+                <button type="submit">
+                    Marcar como assistido
+                </button>
             </form>
 
-            <form action="${pageContext.request.contextPath}/registro-pessoal"
-                  method="post">
-                <input type="hidden" name="acao" value="adicionar">
-                <input type="hidden" name="idFilme"
-                       value="<c:out value='${filme.idFilme}'/>">
-                <input type="hidden" name="favorito" value="true">
-                <button type="submit">Adicionar aos favoritos</button>
+            <form
+                action="${pageContext.request.contextPath}/registro-pessoal"
+                method="post"
+            >
+                <input
+                    type="hidden"
+                    name="acao"
+                    value="adicionar"
+                >
+
+                <input
+                    type="hidden"
+                    name="idFilme"
+                    value="<c:out value='${filme.idFilme}'/>"
+                >
+
+                <input
+                    type="hidden"
+                    name="favorito"
+                    value="true"
+                >
+
+                <button type="submit">
+                    Adicionar aos favoritos
+                </button>
             </form>
 
-            <form action="${pageContext.request.contextPath}/registro-pessoal"
-                  method="post">
-                <input type="hidden" name="acao" value="atualizar">
-                <input type="hidden" name="idFilme"
-                       value="<c:out value='${filme.idFilme}'/>">
-                <label for="nota">Minha nota (0 a 10)</label>
-                <input id="nota" type="number" name="nota"
-                       min="0" max="10" step="0.5" required>
-                <button type="submit">Salvar nota</button>
+            <form
+                action="${pageContext.request.contextPath}/registro-pessoal"
+                method="post"
+            >
+                <input
+                    type="hidden"
+                    name="acao"
+                    value="atualizar"
+                >
+
+                <input
+                    type="hidden"
+                    name="idFilme"
+                    value="<c:out value='${filme.idFilme}'/>"
+                >
+
+                <label for="nota">
+                    Minha nota (0 a 10)
+                </label>
+
+                <input
+                    id="nota"
+                    type="number"
+                    name="nota"
+                    min="0"
+                    max="10"
+                    step="0.5"
+                    required
+                >
+
+                <button type="submit">
+                    Salvar nota
+                </button>
             </form>
 
         </div>
 
-        <p style="margin-top:20px">
-            <a class="tag"
-               href="${pageContext.request.contextPath}/filmes?acao=editar&id=${filme.idFilme}">
+        <p style="margin-top: 20px">
+            <a
+                class="tag"
+                href="${pageContext.request.contextPath}/filmes?acao=editar&id=${filme.idFilme}"
+            >
                 Editar filme
             </a>
         </p>
 
     </section>
+
 </main>
+
+<script src="${pageContext.request.contextPath}/js/components.js"></script>
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
+
 </body>
 </html>

@@ -1,42 +1,34 @@
+// Componentes compartilhados do ReelBook.
 
-// =============================================================
-// components.js
-// Componentes compartilhados do ReelBook
-// =============================================================
-
-// Links da navbar
 const NAV_LINKS = [
   { id: 'home', label: 'Início', href: 'index.jsp' },
-  { id: 'explorar', label: 'Explorar', href: 'pages/explorar.jsp' },
+  { id: 'explorar', label: 'Explorar', href: 'filmes?acao=explorar' },
   { id: 'listas', label: 'Listas', href: 'pages/listas.jsp' },
   { id: 'diario', label: 'Diário', href: 'minha-lista?tipo=diario' }
 ];
 
-// Escapa caracteres para evitar inserir texto do usuário como HTML
 function escaparHTML(valor) {
-  return String(valor == null ? '' : valor).replace(/[&<>"']/g, caractere => {
-    const caracteres = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    };
-
-    return caracteres[caractere];
-  });
+  return String(valor == null ? '' : valor).replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[c]);
 }
 
-// Monta a navbar
+const ICON_SEARCH = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+
 function renderNavbar({
                         basePath = '',
                         activePage = '',
                         usuario = null
                       } = {}) {
-
   const container = document.getElementById('app-navbar');
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
   const linksHTML = NAV_LINKS.map(link => `
     <a href="${basePath}${link.href}"
@@ -45,46 +37,35 @@ function renderNavbar({
     </a>
   `).join('');
 
-  let actionsHTML = '';
+  let actionsHTML;
 
   if (usuario) {
-
     const nome = escaparHTML(usuario.nome || 'Usuário');
 
     const iniciais = nome
         .trim()
         .split(/\s+/)
         .slice(0, 2)
-        .map(parte => parte.charAt(0))
+        .map(p => p.charAt(0))
         .join('')
         .toUpperCase();
 
     actionsHTML = `
-      <button class="icon-btn"
-              type="button"
-              aria-label="Buscar">
-        ${ICON_SEARCH}
-      </button>
-
       <a href="${basePath}perfil"
+         class="avatar"
          title="Meu perfil"
          aria-label="Meu perfil">
-
-        <span class="avatar"
-              style="display: flex; align-items: center; justify-content: center; font-weight: 700;">
-          ${iniciais}
-        </span>
-
+        ${iniciais}
       </a>
+
+      <span class="navbar__user-name">${nome}</span>
 
       <a href="${basePath}logout"
          class="btn btn--outline btn--sm">
         Sair
       </a>
     `;
-
   } else {
-
     actionsHTML = `
       <a href="${basePath}pages/login.jsp"
          class="btn btn--outline btn--sm">
@@ -100,14 +81,15 @@ function renderNavbar({
 
   container.innerHTML = `
     <a href="${basePath}index.jsp" class="logo">
-
-      <img src="${basePath}assets/images/logo-icon.png"
-           alt="ReelBook" />
+      <img
+        src="${basePath}assets/images/logo-icon.png"
+        alt="ReelBook"
+      />
 
       <span class="logo__text">
-        <span class="logo__reel">Reel</span><span class="logo__book">Book</span>
+        <span class="logo__reel">Reel</span>
+        <span class="logo__book">Book</span>
       </span>
-
     </a>
 
     <nav class="navbar__links">
@@ -120,75 +102,64 @@ function renderNavbar({
   `;
 }
 
-// Ícone de busca
-const ICON_SEARCH = `
-  <svg width="20"
-       height="20"
-       viewBox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2">
-
-    <circle cx="11" cy="11" r="8" />
-
-    <line x1="21"
-          y1="21"
-          x2="16.65"
-          y2="16.65" />
-
-  </svg>
-`;
-
-// =============================================================
-// Cards de filmes
-// =============================================================
-
 function criarMovieCardHTML(filme, basePath = '') {
+  const id = Number(filme.idFilme || filme.id || 0);
+
+  const titulo = escaparHTML(
+      filme.titulo || filme.title || 'Filme sem título'
+  );
+
+  const ano = escaparHTML(
+      filme.ano || filme.year || ''
+  );
+
+  const poster = escaparHTML(
+      filme.posterUrl || ''
+  );
+
+  const nota = filme.rating != null
+      ? `★ ${Number(filme.rating).toFixed(1)}`
+      : '';
+
+  const destino = `${basePath}filmes?acao=detalhe&id=${id}`;
 
   return `
-    <a class="movie-card"
-       href="${basePath}pages/filme.jsp?id=${filme.id}">
-
-      <img class="movie-card__poster"
-           src="${filme.posterUrl}"
-           alt="Pôster de ${filme.title}"
-           loading="lazy" />
+    <a class="movie-card" href="${destino}">
+      <img
+        class="movie-card__poster"
+        src="${poster}"
+        alt="Pôster de ${titulo}"
+        loading="lazy"
+        onerror="this.style.visibility='hidden'"
+      />
 
       <div class="movie-card__info">
-
-        <p class="movie-card__title">
-          ${filme.title}
-        </p>
+        <p class="movie-card__title">${titulo}</p>
 
         <div class="movie-card__meta">
+          <span>${ano}</span>
 
-          <span>${filme.year}</span>
-
-          <span class="movie-card__rating">
-            ★ ${formatarNota(filme.rating)}
-          </span>
-
+          ${nota
+      ? `<span class="movie-card__rating">${nota}</span>`
+      : ''
+  }
         </div>
-
       </div>
-
     </a>
   `;
 }
 
-// Renderiza uma lista de filmes
 function renderMovieGrid(container, filmes, basePath = '') {
-
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
   if (!filmes || filmes.length === 0) {
-
-    container.outerHTML = `
+    container.innerHTML = `
       <div class="empty-state">
-        Nenhum filme para mostrar ainda.
+        Nenhum filme encontrado.
       </div>
     `;
-
     return;
   }
 

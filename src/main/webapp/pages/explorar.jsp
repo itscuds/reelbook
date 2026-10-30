@@ -1,59 +1,100 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>ReelBook — Explorar filmes</title>
-  <link rel="icon" href="../assets/images/logo-icon.png" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/components.css" />
+
+  <link
+    rel="icon"
+    href="<%= request.getContextPath() %>/assets/images/logo-icon.png"
+  />
+
+  <link
+    rel="stylesheet"
+    href="<%= request.getContextPath() %>/css/style.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="<%= request.getContextPath() %>/css/components.css"
+  />
 </head>
-<body data-page="explorar" data-basepath="../">
+
+<body
+  data-page="explorar"
+  data-basepath="<%= request.getContextPath() %>/"
+>
 
   <header id="app-navbar" class="navbar container"></header>
 
   <main class="container section">
-    <h1>Explorar / Buscar filmes</h1>
 
-    <!--
-      João isso aqui é só o visual mesmo, falta:
-        - busca de verdade (ligar o input aí embaixo na API do TMDb)
-        - fazer os filtros funcionarem (Gênero / Ano / Nota / Ordenar por)
-        - paginação dos resultados
-      o grid já usa os componentes prontos (renderMovieGrid, de
-      components.js) então é só trocar os filmes pelo
-      retorno da API
-    -->
-    <div class="toolbar">
-      <input type="search" class="search-input" placeholder="Buscar filmes, atores, diretores..." disabled />
+    <h1>Explorar filmes</h1>
+
+    <form id="filtros-filmes" class="toolbar">
+
+      <input
+        id="busca-filme"
+        type="search"
+        class="search-input"
+        placeholder="Buscar por título..."
+      />
 
       <div class="toolbar__filters">
-        <select disabled><option>Gênero</option></select>
-        <select disabled><option>Ano</option></select>
-        <select disabled><option>Nota</option></select>
-        <select disabled><option>Ordenar por</option></select>
-      </div>
-    </div>
-    <p class="text-faint" style="margin-top:8px;">
-      (busca e filtro ainda não funcionam de verdade — o João que vai fazer essa parte)
-    </p>
 
-    <div id="resultados-grid" class="movie-grid" style="margin-top:32px;"></div>
+        <select id="filtro-genero">
+          <option value="">Todos os gêneros</option>
+        </select>
+
+        <select id="filtro-ano">
+          <option value="">Todos os anos</option>
+        </select>
+
+        <button
+          class="btn btn--primary btn--sm"
+          type="submit"
+        >
+          Filtrar
+        </button>
+
+        <button
+          class="btn btn--outline btn--sm"
+          type="reset"
+          id="limpar-filtros"
+        >
+          Limpar
+        </button>
+
+      </div>
+    </form>
+
+    <p
+      id="resultado-contagem"
+      class="text-faint"
+      aria-live="polite"
+    ></p>
+
+    <div
+      id="resultados-grid"
+      class="movie-grid"
+      style="margin-top: 24px"
+      aria-live="polite"
+    ></div>
+
   </main>
 
   <footer class="footer container">
-    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+    <p class="text-faint">
+      © 2026 ReelBook — Projeto acadêmico.
+    </p>
   </footer>
 
-  <script src="../js/components.js"></script>
-  <script src="../js/main.js"></script>
-  <script>
-    // isso é só preview com filmes, pra tela não ficar vazia
-    //trocar isso pela busca/filtro de verdade na API 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderMovieGrid(document.getElementById('resultados-grid'), MOCK_MOVIES, '../');
-    });
-  </script>
+  <script src="<%= request.getContextPath() %>/js/components.js"></script>
+  <script src="<%= request.getContextPath() %>/js/main.js"></script>
+  <script src="<%= request.getContextPath() %>/js/explorar.js"></script>
+
 </body>
 </html>

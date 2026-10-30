@@ -14,21 +14,37 @@ public class DatabaseInitializer implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        try (InputStream in = getClass().getResourceAsStream("/schema.sql");
-             Connection connection = ConnectionFactory.getConnection();
-             Statement statement = connection.createStatement()) {
+        try (
+                InputStream in = getClass().getResourceAsStream("/schema.sql");
+                Connection connection = ConnectionFactory.getConnection();
+                Statement statement = connection.createStatement()
+        ) {
+            if (in == null) {
+                throw new IllegalStateException(
+                        "schema.sql não encontrado em src/main/resources"
+                );
+            }
 
-            String script = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            String script = new String(
+                    in.readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+
             for (String sql : script.split(";")) {
                 if (!sql.isBlank()) {
                     statement.execute(sql);
                 }
             }
-            System.out.println("success in schema creation");
+
+            CatalogoInicializador.inicializar();
+
+            System.out.println(
+                    "Banco inicializado e catálogo demonstrativo conferido."
+            );
 
         } catch (Exception e) {
-            System.out.println("fail in schema creation");
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Falha ao inicializar o banco de dados.");
+            e.printStackTrace();
         }
     }
 

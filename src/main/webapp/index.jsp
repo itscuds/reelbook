@@ -4,53 +4,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>ReelBook — Seu mundo, seus filmes</title>
-  <link rel="icon" href="assets/images/logo-icon.png" />
 
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/home.css" />
+  <link rel="icon" href="<%= request.getContextPath() %>/assets/images/logo-icon.png" />
+
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css" />
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/components.css" />
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/home.css" />
 </head>
-<!-- o data-page e data-basepath aqui são pra o main.js saber qual página é essa e montar a navbar -->
-<body data-page="home" data-basepath="">
 
-  <header id="app-navbar" class="navbar container">
-    <!-- essa parte se preenche via JS (renderNavbar, lá em components.js) -->
-  </header>
+<body
+  data-page="home"
+  data-basepath="<%= request.getContextPath() %>/"
+>
+
+  <header id="app-navbar" class="navbar container"></header>
 
   <main>
     <section class="hero container">
       <div class="hero__content">
-        <img class="hero__logo" src="assets/images/logo-full.png" alt="ReelBook — Explore. Avalie. Relembre." />
 
-        <div id="hero-text">
-          <!-- o texto e os botões daqui mudam via JS dependendo se tem usuário logado ou não -->
-        </div>
+        <img
+          class="hero__logo"
+          src="<%= request.getContextPath() %>/assets/images/logo-full.png"
+          alt="ReelBook — Explore. Avalie. Relembre."
+        />
+
+        <div id="hero-text"></div>
+
       </div>
     </section>
 
     <section class="section container">
+
       <div class="section__header">
         <h2>Em destaque</h2>
-        <a href="pages/explorar.jsp">Ver todos</a>
+
+        <a href="<%= request.getContextPath() %>/filmes?acao=explorar">
+          Ver todos
+        </a>
       </div>
 
-      <div id="destaque-grid" class="movie-grid" aria-live="polite">
-        <!-- cards de filme falsos por MOCK_MOVIES (js/main.js) -->
-      </div>
+      <div
+        id="destaque-grid"
+        class="movie-grid"
+        aria-live="polite"
+      ></div>
+
     </section>
   </main>
 
   <footer class="footer container">
-    <p class="text-faint">© 2026 ReelBook — Projeto acadêmico.</p>
+    <p class="text-faint">
+      © 2026 ReelBook — Projeto acadêmico.
+    </p>
   </footer>
 
-  <!-- a ordem dos scripts importa: components.js vem primeiro pq ele que
-       cria as funções (navbar, card de filme...) que main.js e home.js
-       usam depois. Se trocar a ordem, quebra. -->
-  <script src="js/components.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/home.js"></script>
-  <script src="js/api.js"></script>
+  <script src="<%= request.getContextPath() %>/js/components.js"></script>
+  <script src="<%= request.getContextPath() %>/js/main.js"></script>
+  <script src="<%= request.getContextPath() %>/js/home.js"></script>
+  <script src="<%= request.getContextPath() %>/js/api.js"></script>
+
 </body>
 </html>
