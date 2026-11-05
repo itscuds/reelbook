@@ -47,6 +47,18 @@ public class MinhaListaServlet extends HttpServlet {
             tipo = "lista";
         }
 
+        // Valida o tipo de lista antes de consultar o banco.
+        if (!"lista".equals(tipo)
+                && !"favoritos".equals(tipo)
+                && !"diario".equals(tipo)) {
+
+            response.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    "Tipo de lista inválido."
+            );
+            return;
+        }
+
         try {
             List<RegistroPessoalDTO> todos =
                     dao.listarComFilmesPorUsuario(usuario.getId());
@@ -86,17 +98,11 @@ public class MinhaListaServlet extends HttpServlet {
                         "/pages/diario.jsp"
                 ).forward(request, response);
 
-            } else if ("lista".equals(tipo)) {
+            } else {
 
                 request.getRequestDispatcher(
                         "/pages/minha-lista.jsp"
                 ).forward(request, response);
-
-            } else {
-                response.sendError(
-                        HttpServletResponse.SC_BAD_REQUEST,
-                        "Tipo de lista inválido."
-                );
             }
 
         } catch (SQLException e) {
