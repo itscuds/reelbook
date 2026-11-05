@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @WebServlet("/minha-lista")
 public class MinhaListaServlet extends HttpServlet {
@@ -43,8 +44,11 @@ public class MinhaListaServlet extends HttpServlet {
 
         String tipo = request.getParameter("tipo");
 
+        // Define a lista padrão e normaliza o parâmetro recebido.
         if (tipo == null || tipo.trim().isEmpty()) {
             tipo = "lista";
+        } else {
+            tipo = tipo.trim().toLowerCase(Locale.ROOT);
         }
 
         // Valida o tipo de lista antes de consultar o banco.
