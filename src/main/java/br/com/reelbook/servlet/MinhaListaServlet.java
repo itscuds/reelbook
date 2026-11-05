@@ -1,6 +1,7 @@
 
 package br.com.reelbook.servlet;
 
+import br.com.reelbook.dao.DiarioDAO;
 import br.com.reelbook.dao.RegistroPessoalDAO;
 import br.com.reelbook.model.RegistroPessoalDTO;
 import br.com.reelbook.model.Usuario;
@@ -22,6 +23,7 @@ import java.util.Locale;
 public class MinhaListaServlet extends HttpServlet {
 
     private final RegistroPessoalDAO dao = new RegistroPessoalDAO();
+    private final DiarioDAO diarioDAO = new DiarioDAO();
 
     @Override
     protected void doGet(
@@ -44,7 +46,6 @@ public class MinhaListaServlet extends HttpServlet {
 
         String tipo = request.getParameter("tipo");
 
-        // Define a lista padrão e normaliza o parâmetro recebido.
         if (tipo == null || tipo.trim().isEmpty()) {
             tipo = "lista";
         } else {
@@ -64,6 +65,23 @@ public class MinhaListaServlet extends HttpServlet {
         }
 
         try {
+
+            // O Diário utiliza seu próprio DAO e DTO.
+            if ("diario".equals(tipo)) {
+
+                List<DiarioDAO.DiarioDTO> diario =
+                        diarioDAO.listarPorUsuario(usuario.getId());
+
+                request.setAttribute("diario", diario);
+
+                request.getRequestDispatcher(
+                        "/pages/diario.jsp"
+                ).forward(request, response);
+
+                return;
+            }
+
+            // Lista pessoal e favoritos utilizam o RegistroPessoalDAO.
             List<RegistroPessoalDTO> todos =
                     dao.listarComFilmesPorUsuario(usuario.getId());
 
@@ -72,15 +90,8 @@ public class MinhaListaServlet extends HttpServlet {
             for (RegistroPessoalDTO item : todos) {
 
                 boolean favorito = item.getRegistro().isFavorito();
-                String status = item.getRegistro().getStatus();
 
                 if ("favoritos".equals(tipo) && favorito) {
-                    filtrados.add(item);
-
-                } else if ("diario".equals(tipo)
-                        && "ASSISTIDO".equalsIgnoreCase(
-                        status == null ? "" : status)) {
-
                     filtrados.add(item);
 
                 } else if ("lista".equals(tipo)) {
@@ -96,12 +107,6 @@ public class MinhaListaServlet extends HttpServlet {
                         "/pages/favoritos.jsp"
                 ).forward(request, response);
 
-            } else if ("diario".equals(tipo)) {
-
-                request.getRequestDispatcher(
-                        "/pages/diario.jsp"
-                ).forward(request, response);
-
             } else {
 
                 request.getRequestDispatcher(
@@ -110,6 +115,7 @@ public class MinhaListaServlet extends HttpServlet {
             }
 
         } catch (SQLException e) {
+
             throw new ServletException(
                     "Erro ao carregar os registros pessoais.", e
             );

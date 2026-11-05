@@ -2,19 +2,16 @@
 <%@ page contentType="text/html;charset=UTF-8"
          pageEncoding="UTF-8"
          isELIgnored="false" %>
-<%@ page import="br.com.reelbook.model.RegistroPessoalDTO" %>
+
+<%@ page import="br.com.reelbook.dao.DiarioDAO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.math.BigDecimal" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="br.com.reelbook.util.ConnectionFactory" %>
 
 <%
-    List<RegistroPessoalDTO> registros =
-        (List<RegistroPessoalDTO>) request.getAttribute("registros");
+    List<DiarioDAO.DiarioDTO> diario =
+        (List<DiarioDAO.DiarioDTO>) request.getAttribute("diario");
 
-    if (registros == null) {
+    if (diario == null) {
         response.sendRedirect(request.getContextPath()
                 + "/minha-lista?tipo=diario");
         return;
@@ -23,6 +20,7 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,89 +43,39 @@
     <div class="diario-lista">
 
         <%
-            boolean encontrou = false;
+            if (diario.isEmpty()) {
+        %>
 
-            for (RegistroPessoalDTO item : registros) {
+            <p class="text-muted">
+                Seu diário ainda está vazio. Quando marcar um filme
+                como assistido, ele aparecerá aqui.
+            </p>
 
-                if (item.getRegistro().getStatus() == null
-                        || !"ASSISTIDO".equalsIgnoreCase(
-                            item.getRegistro().getStatus())) {
-                    continue;
-                }
+        <%
+            } else {
 
-                encontrou = true;
+                for (DiarioDAO.DiarioDTO item : diario) {
 
-                int idFilme = item.getFilme().getIdFilme();
-                String comentario = null;
+                    String titulo = item.titulo;
 
-                Connection conn = null;
-                PreparedStatement ps = null;
-                ResultSet rs = null;
+                    String comentario = item.comentario;
 
-                try {
-                    conn = ConnectionFactory.getConnection();
+                    String nota = item.nota == null
+                            ? "Sem nota"
+                            : BigDecimal.valueOf(item.nota)
+                                    .stripTrailingZeros()
+                                    .toPlainString();
 
-                    ps = conn.prepareStatement(
-                        "SELECT TEXTO FROM RESENHA "
-                        + "WHERE ID_USUARIO = ? AND ID_FILME = ?"
-                    );
-
-                    ps.setInt(1, item.getRegistro().getIdUsuario());
-                    ps.setInt(2, idFilme);
-
-                    rs = ps.executeQuery();
-
-                    if (rs.next()) {
-                        comentario = rs.getString("TEXTO");
-                    }
-
-                } catch (Exception e) {
-                    application.log(
-                        "Erro ao carregar comentário do diário", e
-                    );
-
-                } finally {
-
-                    try {
-                        if (rs != null) {
-                            rs.close();
-                        }
-                    } catch (Exception e) {
-                        application.log("Erro ao fechar ResultSet", e);
-                    }
-
-                    try {
-                        if (ps != null) {
-                            ps.close();
-                        }
-                    } catch (Exception e) {
-                        application.log(
-                            "Erro ao fechar PreparedStatement", e
-                        );
-                    }
-
-                    try {
-                        if (conn != null) {
-                            conn.close();
-                        }
-                    } catch (Exception e) {
-                        application.log("Erro ao fechar Connection", e);
-                    }
-                }
-
-                String titulo = item.getFilme().getTitulo();
-
-                BigDecimal nota = item.getRegistro().getNota();
-
-                java.time.LocalDate data =
-                    item.getRegistro().getDataRegistro();
+                    String data = item.dataRegistro == null
+                            ? "Data não informada"
+                            : item.dataRegistro.toString();
         %>
 
         <article class="diario-item">
 
             <img class="diario-item__poster"
-                 src="<%= item.getFilme().getPosterUrl() == null
-                     ? "" : item.getFilme().getPosterUrl() %>"
+                 src="<%= item.posterUrl == null
+                     ? "" : item.posterUrl %>"
                  alt="Pôster de <%= titulo %>"
                  loading="lazy" />
 
@@ -137,14 +85,12 @@
                     <%= titulo %>
 
                     <span class="text-faint">
-                        (<%= item.getFilme().getAno() %>)
+                        (<%= item.ano %>)
                     </span>
                 </p>
 
                 <p class="movie-card__rating">
-                    ★ <%= nota == null
-                        ? "Sem nota"
-                        : nota.stripTrailingZeros().toPlainString() %>
+                    ★ <%= nota %>
                 </p>
 
                 <p class="text-muted">
@@ -160,7 +106,11 @@
 
                     <input type="hidden"
                            name="idFilme"
-                           value="<%= idFilme %>" />
+                           value="<%= item.idFilme %>" />
+
+                    <input type="hidden"
+                           name="origem"
+                           value="diario" />
 
                     <button type="submit"
                             class="btn btn--outline btn--sm"
@@ -173,25 +123,13 @@
             </div>
 
             <span class="text-faint">
-                <%= data == null
-                    ? "Data não informada"
-                    : data %>
+                <%= data %>
             </span>
 
         </article>
 
         <%
-            }
-
-            if (!encontrou) {
-        %>
-
-            <p class="text-muted">
-                Seu diário ainda está vazio. Quando marcar um filme
-                como assistido, ele aparecerá aqui.
-            </p>
-
-        <%
+                }
             }
         %>
 
