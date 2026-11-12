@@ -74,12 +74,26 @@
 
         .acoes button {
             cursor: pointer;
+            padding: 8px 16px;
+            background: var(--color-primary);
+            color: #fff;
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+        }
+
+        .acoes button:hover {
+            background: var(--color-primary-hover);
         }
 
         .acoes input,
         .acoes select {
             max-width: 140px;
             padding: 8px;
+            background: var(--color-bg-elevated-2);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
         }
 
         @media (max-width: 650px) {
@@ -118,7 +132,6 @@
                     class="poster"
                     src="<c:out value='${filme.posterUrl}'/>"
                     alt="Pôster de <c:out value='${filme.titulo}'/>"
-                    onerror="this.style.display='none'"
                 >
             </c:when>
 
@@ -270,7 +283,7 @@
                 >
 
                 <label for="nota">
-                    Minha nota (0 a 10)
+                    Minha nota (0 a 5)
                 </label>
 
                 <input
@@ -278,7 +291,7 @@
                     type="number"
                     name="nota"
                     min="0"
-                    max="10"
+                    max="5"
                     step="0.5"
                     required
                 >

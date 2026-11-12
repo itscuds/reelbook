@@ -111,6 +111,10 @@
                        name="favorito"
                        value="false" />
 
+                <input type="hidden"
+                       name="origem"
+                       value="favoritos" />
+
                 <button type="submit"
                         class="btn btn-secondary"
                         aria-label="Remover dos favoritos">

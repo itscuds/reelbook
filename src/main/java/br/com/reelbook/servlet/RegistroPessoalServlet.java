@@ -1,4 +1,3 @@
-
 package br.com.reelbook.servlet;
 
 import br.com.reelbook.dao.RegistroPessoalDAO;
@@ -137,16 +136,30 @@ public class RegistroPessoalServlet extends HttpServlet {
 
                 if (valorNota.compareTo(BigDecimal.ZERO) < 0
                         || valorNota.compareTo(
-                        new BigDecimal("10")) > 0) {
+                        new BigDecimal("5")) > 0) {
 
                     response.sendError(
                             HttpServletResponse.SC_BAD_REQUEST,
-                            "A nota deve estar entre 0 e 10."
+                            "A nota deve estar entre 0 e 5."
+                    );
+                    return;
+                }
+
+                if ("QUERO_ASSISTIR".equals(registro.getStatus())) {
+
+                    response.sendError(
+                            HttpServletResponse.SC_BAD_REQUEST,
+                            "Só é possível dar nota a um filme já assistido."
                     );
                     return;
                 }
 
                 registro.setNota(valorNota);
+            }
+
+            // Filme que ainda não foi assistido não pode ter nota.
+            if ("QUERO_ASSISTIR".equals(registro.getStatus())) {
+                registro.setNota(null);
             }
 
             if (novoRegistro) {
@@ -186,31 +199,23 @@ public class RegistroPessoalServlet extends HttpServlet {
             boolean favorito
     ) throws IOException {
 
-        String destino;
+        String tipo = "lista";
 
-        if ("diario".equals(origem)) {
-            destino = "/minha-lista?tipo=diario";
+        if ("diario".equals(origem)
+                || "favoritos".equals(origem)
+                || "lista".equals(origem)) {
 
-        } else if ("favoritos".equals(origem)) {
-            destino = "/minha-lista?tipo=favoritos";
+            tipo = origem;
 
-        } else if ("lista".equals(origem)) {
-            destino = "/minha-lista?tipo=lista";
-
-        } else if ("ASSISTIDO".equalsIgnoreCase(
-                status == null ? "" : status)) {
-
-            destino = "/minha-lista?tipo=diario";
+        } else if ("ASSISTIDO".equals(status)) {
+            tipo = "diario";
 
         } else if (favorito) {
-            destino = "/minha-lista?tipo=favoritos";
-
-        } else {
-            destino = "/minha-lista?tipo=lista";
+            tipo = "favoritos";
         }
 
         response.sendRedirect(
-                request.getContextPath() + destino
+                request.getContextPath() + "/minha-lista?tipo=" + tipo
         );
     }
 }
