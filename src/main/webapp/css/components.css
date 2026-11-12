@@ -209,6 +209,19 @@
   border-color: var(--color-primary);
 }
 
+/* campos de texto do login e do cadastro (class="input") */
+.input {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--color-text);
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+}
+
 /* barra de busca + filtros, usada no Explorar por enquanto */
 .toolbar {
   display: flex;
