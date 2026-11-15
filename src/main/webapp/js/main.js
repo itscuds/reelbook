@@ -143,18 +143,30 @@ const MOCK_MOVIES = [
   }
 ];
 
-// =============================================================
+
 // AUTENTICAÇÃO REAL — SESSÃO HTTP DO TOMCAT
-// =============================================================
+
 
 let usuarioAtual = null;
+
+// Raiz do site, descoberta pelo próprio endereço deste script
+// (…/js/main.js -> …/). Funciona em qualquer página, mesmo quando
+// o data-basepath do HTML está errado ou a URL vem de um servlet
+// (ex.: /perfil, /minha-lista).
+const APP_ROOT = (function () {
+  try {
+    return new URL('../', document.currentScript.src).href;
+  } catch (e) {
+    return null;
+  }
+})();
 
 function getUsuarioLogado() {
   return usuarioAtual;
 }
 
 async function carregarSessao() {
-  const basePath = document.body.dataset.basepath || '';
+  const basePath = APP_ROOT || document.body.dataset.basepath || '';
   const page = document.body.dataset.page || '';
 
   try {
@@ -172,7 +184,8 @@ async function carregarSessao() {
     usuarioAtual = dados && dados.logado
         ? {
           id: dados.id,
-          nome: dados.nome
+          nome: dados.nome,
+          perfil: dados.perfil
         }
         : null;
 

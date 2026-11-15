@@ -30,12 +30,18 @@ function renderNavbar({
     return;
   }
 
-  const linksHTML = NAV_LINKS.map(link => `
-    <a href="${basePath}${link.href}"
-       class="${link.id === activePage ? 'is-active' : ''}">
-      ${link.label}
-    </a>
-  `).join('');
+  // Link de administração só aparece para curadores.
+    const links = (usuario && usuario.perfil === 'CURADOR')
+        ? [...NAV_LINKS, { id: 'generos', label: 'Gêneros', href: 'generos' }]
+        : NAV_LINKS;
+
+    const linksHTML = links.map(link => `
+      <a href="${basePath}${link.href}"
+         class="${link.id === activePage ? 'is-active' : ''}">
+        ${link.label}
+      </a>
+    `).join('');
+
 
   let actionsHTML;
 

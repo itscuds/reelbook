@@ -41,7 +41,8 @@ public class SessaoServlet extends HttpServlet {
         String json = "{"
                 + "\"logado\":true,"
                 + "\"id\":" + usuario.getId() + ","
-                + "\"nome\":\"" + nome + "\""
+                + "\"nome\":\"" + nome + "\","
+                + "\"perfil\":\"" + escaparJson(usuario.getPerfil()) + "\""
                 + "}";
 
         response.getWriter().write(json);
