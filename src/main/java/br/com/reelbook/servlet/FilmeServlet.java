@@ -85,6 +85,29 @@ public class FilmeServlet extends HttpServlet {
                     }
 
                     request.setAttribute("filme", detalhe);
+
+                    // Informa se o filme já é favorito do usuário logado.
+                    br.com.reelbook.model.Usuario logado =
+                            request.getSession(false) == null
+                                    ? null
+                                    : (br.com.reelbook.model.Usuario) request
+                                    .getSession(false)
+                                    .getAttribute("usuarioLogado");
+
+                    boolean ehFavorito = false;
+
+                    if (logado != null) {
+                        for (br.com.reelbook.model.RegistroPessoal r :
+                                new br.com.reelbook.dao.RegistroPessoalDAO()
+                                        .listarPorUsuario(logado.getId())) {
+                            if (r.getIdFilme() == detalhe.getIdFilme()
+                                    && r.isFavorito()) {
+                                ehFavorito = true;
+                            }
+                        }
+                    }
+
+                    request.setAttribute("ehFavorito", ehFavorito);
                     request.getRequestDispatcher("/pages/detalhe.jsp")
                             .forward(request, response);
                     return;

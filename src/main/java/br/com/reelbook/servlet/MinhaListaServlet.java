@@ -44,6 +44,9 @@ public class MinhaListaServlet extends HttpServlet {
             return;
         }
 
+        // Evita mostrar a lista de um usuário no botão "voltar" após o logout.
+        response.setHeader("Cache-Control", "no-store");
+
         String tipo = request.getParameter("tipo");
 
         if (tipo == null || tipo.trim().isEmpty()) {

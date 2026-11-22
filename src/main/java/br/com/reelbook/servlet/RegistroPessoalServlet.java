@@ -105,6 +105,13 @@ public class RegistroPessoalServlet extends HttpServlet {
                     return;
                 }
 
+                // A data do diário é o dia em que o filme foi assistido.
+                if ("ASSISTIDO".equals(status)
+                        && "QUERO_ASSISTIR".equals(registro.getStatus())) {
+
+                    registro.setDataRegistro(LocalDate.now());
+                }
+
                 registro.setStatus(status);
             }
 

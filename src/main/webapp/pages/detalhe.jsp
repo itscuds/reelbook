@@ -239,6 +239,23 @@
                 </button>
             </form>
 
+            <c:choose>
+                <c:when test="${ehFavorito}">
+                    <form
+                        action="${pageContext.request.contextPath}/registro-pessoal"
+                        method="post"
+                    >
+                        <input type="hidden" name="acao" value="atualizar">
+                        <input type="hidden" name="idFilme" value="<c:out value='${filme.idFilme}'/>">
+                        <input type="hidden" name="favorito" value="false">
+
+                        <button type="submit">
+                            Remover dos favoritos
+                        </button>
+                    </form>
+                </c:when>
+
+                <c:otherwise>
             <form
                 action="${pageContext.request.contextPath}/registro-pessoal"
                 method="post"
@@ -265,6 +282,8 @@
                     Adicionar aos favoritos
                 </button>
             </form>
+                </c:otherwise>
+            </c:choose>
 
             <form
                 action="${pageContext.request.contextPath}/registro-pessoal"

@@ -80,15 +80,20 @@
             <a href="<%= request.getContextPath() %>/filmes?acao=detalhe&id=<%= filme.getIdFilme() %>">
 
                 <img
+                    class="movie-card__poster"
                     src="<%= filme.getPosterUrl() == null
                         ? "" : filme.getPosterUrl() %>"
                     alt="Pôster de <%= filme.getTitulo() %>"
                     loading="lazy"
                 />
 
-                <h3><%= filme.getTitulo() %></h3>
+                <div class="movie-card__info">
+                    <p class="movie-card__title"><%= filme.getTitulo() %></p>
 
-                <p><%= filme.getAno() %></p>
+                    <div class="movie-card__meta">
+                        <span><%= filme.getAno() %></span>
+                    </div>
+                </div>
 
             </a>
 
@@ -116,7 +121,7 @@
                        value="favoritos" />
 
                 <button type="submit"
-                        class="btn btn-secondary"
+                        class="btn btn--outline btn--sm"
                         aria-label="Remover dos favoritos">
                     Remover dos favoritos
                 </button>

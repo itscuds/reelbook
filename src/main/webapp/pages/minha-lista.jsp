@@ -80,13 +80,80 @@
 
                 <p class="text-muted">
                     Status:
-                    <%= status == null ? "Não informado" : status %>
+                    <%= "ASSISTIDO".equals(status) ? "Assistido" : "Quero assistir" %>
+                    <%= item.getRegistro().isFavorito() ? " · ★ Favorito" : "" %>
                 </p>
+
+                <% if ("ASSISTIDO".equals(status)) { %>
+                    <p class="movie-card__rating">
+                        <%= item.getRegistro().getNota() == null
+                            ? "Sem nota"
+                            : "★ " + item.getRegistro().getNota() %>
+                    </p>
+                <% } %>
 
                 <a href="<%= request.getContextPath() %>/filmes?acao=detalhe&id=<%= idFilme %>">
                     Ver detalhes
                 </a>
 
+                <!-- Mudar status -->
+                <form
+                    action="<%= request.getContextPath() %>/registro-pessoal"
+                    method="post"
+                >
+                    <input type="hidden" name="acao" value="atualizar">
+                    <input type="hidden" name="idFilme" value="<%= idFilme %>">
+                    <input type="hidden" name="origem" value="lista">
+                    <input type="hidden" name="status"
+                           value="<%= "ASSISTIDO".equals(status) ? "QUERO_ASSISTIR" : "ASSISTIDO" %>">
+
+                    <button type="submit" class="btn btn--outline btn--sm">
+                        <%= "ASSISTIDO".equals(status)
+                            ? "Voltar para quero assistir"
+                            : "Marcar como assistido" %>
+                    </button>
+                </form>
+
+                <!-- Dar nota (só para filmes assistidos) -->
+                <% if ("ASSISTIDO".equals(status)) { %>
+                <form
+                    action="<%= request.getContextPath() %>/registro-pessoal"
+                    method="post"
+                >
+                    <input type="hidden" name="acao" value="atualizar">
+                    <input type="hidden" name="idFilme" value="<%= idFilme %>">
+                    <input type="hidden" name="origem" value="lista">
+
+                    <input type="number" name="nota" min="0" max="5" step="0.5"
+                           value="<%= item.getRegistro().getNota() == null
+                               ? "" : item.getRegistro().getNota() %>"
+                           aria-label="Nota de 0 a 5" required>
+
+                    <button type="submit" class="btn btn--outline btn--sm">
+                        Salvar nota
+                    </button>
+                </form>
+                <% } %>
+
+                <!-- Favoritar / desfavoritar -->
+                <form
+                    action="<%= request.getContextPath() %>/registro-pessoal"
+                    method="post"
+                >
+                    <input type="hidden" name="acao" value="atualizar">
+                    <input type="hidden" name="idFilme" value="<%= idFilme %>">
+                    <input type="hidden" name="origem" value="lista">
+                    <input type="hidden" name="favorito"
+                           value="<%= item.getRegistro().isFavorito() ? "false" : "true" %>">
+
+                    <button type="submit" class="btn btn--outline btn--sm">
+                        <%= item.getRegistro().isFavorito()
+                            ? "Remover dos favoritos"
+                            : "Adicionar aos favoritos" %>
+                    </button>
+                </form>
+
+                <!-- Remover da lista -->
                 <form
                     action="<%= request.getContextPath() %>/registro-pessoal"
                     method="post"

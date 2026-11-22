@@ -84,7 +84,7 @@ public class RegistroPessoalDAO {
 
     public void atualizar(RegistroPessoal registro) throws SQLException {
         String sql = "UPDATE REGISTRO_PESSOAL "
-                + "SET STATUS = ?, FAVORITO = ?, NOTA = ? "
+                + "SET STATUS = ?, FAVORITO = ?, NOTA = ?, DATA_REGISTRO = ? "
                 + "WHERE ID_USUARIO = ? AND ID_FILME = ?";
 
         try (Connection conexao = ConnectionFactory.getConnection();
@@ -99,8 +99,13 @@ public class RegistroPessoalDAO {
                 comando.setBigDecimal(3, registro.getNota());
             }
 
-            comando.setInt(4, registro.getIdUsuario());
-            comando.setInt(5, registro.getIdFilme());
+            LocalDate data = registro.getDataRegistro() == null
+                    ? LocalDate.now()
+                    : registro.getDataRegistro();
+
+            comando.setDate(4, Date.valueOf(data));
+            comando.setInt(5, registro.getIdUsuario());
+            comando.setInt(6, registro.getIdFilme());
 
             comando.executeUpdate();
         }

@@ -29,7 +29,7 @@ function renderizarHero() {
           Explorar filmes
         </a>
 
-        <a href="pages/listas.jsp" class="btn btn--outline">
+        <a href="minha-lista?tipo=lista" class="btn btn--outline">
           Minhas listas
         </a>
       </div>

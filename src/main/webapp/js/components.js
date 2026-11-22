@@ -1,9 +1,9 @@
-// Componentes compartilhados do ReelBook.
 
 const NAV_LINKS = [
   { id: 'home', label: 'Início', href: 'index.jsp' },
   { id: 'explorar', label: 'Explorar', href: 'filmes?acao=explorar' },
-  { id: 'listas', label: 'Listas', href: 'pages/listas.jsp' },
+  { id: 'listas', label: 'Listas', href: 'minha-lista?tipo=lista' },
+  { id: 'favoritos', label: 'Favoritos', href: 'minha-lista?tipo=favoritos', somenteLogado: true },
   { id: 'diario', label: 'Diário', href: 'minha-lista?tipo=diario' }
 ];
 
@@ -30,12 +30,15 @@ function renderNavbar({
     return;
   }
 
-  // Link de administração só aparece para curadores.
-    const links = (usuario && usuario.perfil === 'CURADOR')
-        ? [...NAV_LINKS, { id: 'generos', label: 'Gêneros', href: 'generos' }]
-        : NAV_LINKS;
+  // Favoritos só aparece para quem está logado (cada usuário vê os seus).
+  const linksBase = NAV_LINKS.filter(link => !link.somenteLogado || usuario);
 
-    const linksHTML = links.map(link => `
+  // Link de administração só aparece para curadores.
+  const links = (usuario && usuario.perfil === 'CURADOR')
+      ? [...linksBase, { id: 'generos', label: 'Gêneros', href: 'generos' }]
+      : linksBase;
+
+  const linksHTML = links.map(link => `
       <a href="${basePath}${link.href}"
          class="${link.id === activePage ? 'is-active' : ''}">
         ${link.label}
