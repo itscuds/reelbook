@@ -306,6 +306,7 @@
                 </label>
 
                 <input
+                    class="input"
                     id="nota"
                     type="number"
                     name="nota"

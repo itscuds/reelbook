@@ -124,7 +124,7 @@
                     <input type="hidden" name="idFilme" value="<%= idFilme %>">
                     <input type="hidden" name="origem" value="lista">
 
-                    <input type="number" name="nota" min="0" max="5" step="0.5"
+                    <input class="input" type="number" name="nota" min="0" max="5" step="0.5"
                            value="<%= item.getRegistro().getNota() == null
                                ? "" : item.getRegistro().getNota() %>"
                            aria-label="Nota de 0 a 5" required>
