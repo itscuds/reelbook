@@ -2,6 +2,7 @@ package br.com.reelbook.servlet;
 
 import br.com.reelbook.dao.UsuarioDAO;
 import br.com.reelbook.model.Usuario;
+import br.com.reelbook.util.SenhaUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -64,7 +65,7 @@ public class CadastroServlet extends HttpServlet {
                 return;
             }
 
-            Usuario novoUsuario = new Usuario(nome.trim(), email.trim(), senha);
+            Usuario novoUsuario = new Usuario(nome.trim(), email.trim(), SenhaUtil.gerarHash(senha));
             usuarioDAO.cadastrar(novoUsuario);
 
             HttpSession sessaoAntiga = req.getSession(false);

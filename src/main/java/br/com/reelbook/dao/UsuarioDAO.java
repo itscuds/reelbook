@@ -2,6 +2,7 @@ package br.com.reelbook.dao;
 
 import br.com.reelbook.model.Usuario;
 import br.com.reelbook.util.ConnectionFactory;
+import br.com.reelbook.util.SenhaUtil;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -54,16 +55,18 @@ public class UsuarioDAO {
 
     public Usuario autenticar(String email, String senha) throws SQLException {
         String sql = "SELECT ID_USUARIO, NOME, EMAIL, SENHA_HASH, PERFIL, DATA_CADASTRO, ATIVO "
-                + "FROM USUARIO WHERE EMAIL = ? AND SENHA_HASH = ? AND ATIVO = TRUE";
+                + "FROM USUARIO WHERE EMAIL = ? AND ATIVO = TRUE";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
-            ps.setString(2, senha);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return converter(rs);
+                    Usuario usuario = converter(rs);
+                    if (SenhaUtil.confere(senha, usuario.getSenhaHash())) {
+                        return usuario;
+                    }
                 }
             }
         }
