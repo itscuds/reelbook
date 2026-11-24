@@ -31,6 +31,7 @@ public class DatabaseInitializer implements ServletContextListener {
             );
 
             CatalogoInicializador.inicializar();
+            CuradorInicializador.inicializar();
 
             context.log(
                     "[ReelBook] Inicialização do banco e sincronização "

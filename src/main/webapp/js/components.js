@@ -34,9 +34,11 @@ function renderNavbar({
   const linksBase = NAV_LINKS.filter(link => !link.somenteLogado || usuario);
 
   // Link de administração só aparece para curadores.
-  const links = (usuario && usuario.perfil === 'CURADOR')
-      ? [...linksBase, { id: 'generos', label: 'Gêneros', href: 'generos' }]
-      : linksBase;
+    const links = (usuario && usuario.perfil === 'CURADOR')
+        ? [...linksBase,
+           { id: 'catalogo', label: 'Catálogo', href: 'filmes' },
+           { id: 'generos', label: 'Gêneros', href: 'generos' }]
+        : linksBase;
 
   const linksHTML = links.map(link => `
       <a href="${basePath}${link.href}"
@@ -64,7 +66,7 @@ function renderNavbar({
          class="avatar"
          title="Meu perfil"
          aria-label="Meu perfil">
-        ${iniciais}
+         <img src="${basePath}assets/images/gatos/gato-${(usuario.id % 6) + 1}.svg" alt="">
       </a>
 
       <span class="navbar__user-name">${nome}</span>

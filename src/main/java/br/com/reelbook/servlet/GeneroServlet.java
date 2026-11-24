@@ -15,13 +15,13 @@ import java.sql.SQLException;
 
 /**
  * Administração de gêneros (só perfil CURADOR).
- * GET  /generos.jsp                    -> lista
- * POST /generos.jsp  acao=cadastrar    -> novo gênero
- * POST /generos.jsp  acao=renomear     -> renomeia / edita descrição e ordem
- * POST /generos.jsp  acao=desativar    -> ATIVO = FALSE
- * POST /generos.jsp  acao=reativar     -> ATIVO = TRUE
+ * GET  /generos                    -> lista
+ * POST /generos  acao=cadastrar    -> novo gênero
+ * POST /generos  acao=renomear     -> renomeia / edita descrição e ordem
+ * POST /generos  acao=desativar    -> ATIVO = FALSE
+ * POST /generos  acao=reativar     -> ATIVO = TRUE
  */
-@WebServlet("/generos.jsp")
+@WebServlet("/generos")
 public class GeneroServlet extends HttpServlet {
 
     private final GeneroDAO dao = new GeneroDAO();
@@ -37,7 +37,7 @@ public class GeneroServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         try {
-            request.setAttribute("generos.jsp", dao.listarTodos());
+            request.setAttribute("generos", dao.listarTodos());
         } catch (SQLException e) {
             throw new ServletException("Erro ao listar gêneros.", e);
         }
@@ -46,7 +46,7 @@ public class GeneroServlet extends HttpServlet {
         request.setAttribute("mensagem", request.getParameter("msg"));
         request.setAttribute("erro", request.getParameter("erro"));
 
-        request.getRequestDispatcher("/pages/generos.jsp.jsp")
+        request.getRequestDispatcher("/pages/generos.jsp")
                 .forward(request, response);
     }
 
@@ -186,7 +186,7 @@ public class GeneroServlet extends HttpServlet {
     private void voltar(HttpServletRequest request,
                         HttpServletResponse response,
                         String tipo, String texto) throws IOException {
-        response.sendRedirect(request.getContextPath() + "/generos.jsp?" + tipo
+        response.sendRedirect(request.getContextPath() + "/generos?" + tipo
                 + "=" + java.net.URLEncoder.encode(texto, "UTF-8"));
     }
 

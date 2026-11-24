@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Avatar de gatinho">
+  <rect width="160" height="160" fill="#bae6fd"/>
+  <polygon points="34,74 38,26 72,50" fill="#9ca3af"/>
+  <polygon points="126,74 122,26 88,50" fill="#9ca3af"/>
+  <polygon points="42,64 44,38 62,52" fill="#e5e7eb"/>
+  <polygon points="118,64 116,38 98,52" fill="#e5e7eb"/>
+  <ellipse cx="80" cy="92" rx="52" ry="46" fill="#9ca3af"/>
+  
+  <ellipse cx="80" cy="108" rx="22" ry="16" fill="#e5e7eb"/>
+  <ellipse cx="60" cy="88" rx="9" ry="11" fill="#ffffff"/>
+  <ellipse cx="100" cy="88" rx="9" ry="11" fill="#ffffff"/>
+  <ellipse cx="60" cy="90" rx="5" ry="8" fill="#b45309"/>
+  <ellipse cx="100" cy="90" rx="5" ry="8" fill="#b45309"/>
+  <ellipse cx="60" cy="90" rx="2" ry="6" fill="#111827"/>
+  <ellipse cx="100" cy="90" rx="2" ry="6" fill="#111827"/>
+  <polygon points="74,102 86,102 80,110" fill="#f472b6"/>
+  <path d="M80 110 v6 M80 116 q-7 7 -14 2 M80 116 q7 7 14 2" stroke="#1f2937" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M30 104 l22 4 M30 116 l22 -3 M130 104 l-22 4 M130 116 l-22 -3" stroke="#1f2937" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+</svg>

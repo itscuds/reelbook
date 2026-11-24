@@ -3,6 +3,7 @@ package br.com.reelbook.servlet;
 import br.com.reelbook.dao.FilmeDAO;
 import br.com.reelbook.model.Filme;
 import br.com.reelbook.model.Genero;
+import br.com.reelbook.model.Usuario;
 import br.com.reelbook.util.ConnectionFactory;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -35,6 +37,12 @@ public class FilmeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String acao = valor(request.getParameter("acao"), "listar");
+
+        // Cadastrar e editar filme: só curador.
+        if (("novo".equals(acao) || "editar".equals(acao))
+                && !autorizarCurador(request, response)) {
+            return;
+        }
 
         try {
             switch (acao) {
@@ -113,6 +121,15 @@ public class FilmeServlet extends HttpServlet {
                     return;
 
                 default:
+                    // A lista administrativa é só do curador; os demais
+                    // usuários navegam pelo Explorar.
+                    if (!ehCurador(request)) {
+                        response.sendRedirect(
+                                request.getContextPath() + "/filmes?acao=explorar"
+                        );
+                        return;
+                    }
+
                     String busca = request.getParameter("busca");
                     Integer ano = inteiroOpcional(request.getParameter("ano"));
                     Integer genero = inteiroOpcional(request.getParameter("genero"));
@@ -148,6 +165,11 @@ public class FilmeServlet extends HttpServlet {
     ) throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+
+        // Salvar, editar e desativar filme: só curador.
+        if (!autorizarCurador(request, response)) {
+            return;
+        }
 
         String acao = valor(request.getParameter("acao"), "salvar");
 
@@ -222,6 +244,46 @@ public class FilmeServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new ServletException("Erro ao salvar filme", e);
         }
+    }
+
+    private Usuario usuarioLogado(HttpServletRequest request) {
+        HttpSession sessao = request.getSession(false);
+
+        return sessao == null
+                ? null
+                : (Usuario) sessao.getAttribute("usuarioLogado");
+    }
+
+    private boolean ehCurador(HttpServletRequest request) {
+        Usuario u = usuarioLogado(request);
+
+        return u != null && "CURADOR".equals(u.getPerfil());
+    }
+
+    /** Visitante vai para o login; usuário comum recebe 403. */
+    private boolean autorizarCurador(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+
+        Usuario u = usuarioLogado(request);
+
+        if (u == null) {
+            response.sendRedirect(
+                    request.getContextPath() + "/pages/login.jsp"
+            );
+            return false;
+        }
+
+        if (!"CURADOR".equals(u.getPerfil())) {
+            response.sendError(
+                    403,
+                    "Apenas curadores podem gerenciar o catálogo."
+            );
+            return false;
+        }
+
+        return true;
     }
 
     private void listarFilmesJson(

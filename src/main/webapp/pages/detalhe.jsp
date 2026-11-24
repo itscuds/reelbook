@@ -300,7 +300,11 @@
                     name="idFilme"
                     value="<c:out value='${filme.idFilme}'/>"
                 >
-
+                 <input
+                    type="hidden"
+                    name="status"
+                    value="ASSISTIDO"
+                >
                 <label for="nota">
                     Minha nota (0 a 5)
                 </label>
@@ -323,6 +327,8 @@
 
         </div>
 
+  <%-- Só o curador vê o botão de editar --%>
+        <c:if test="${sessionScope.usuarioLogado.perfil == 'CURADOR'}">
         <p style="margin-top: 20px">
             <a
                 class="tag"
@@ -331,6 +337,7 @@
                 Editar filme
             </a>
         </p>
+    </c:if>
 
     </section>
 

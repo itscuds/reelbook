@@ -28,7 +28,7 @@
 
   <main id="main-conteudo" class="container section">
     <div class="perfil-header">
-      <img class="perfil-header__avatar" src="https://i.pravatar.cc/160?u=<%= usuario.getId() %>" alt="Foto de perfil" />
+      <img class="perfil-header__avatar" src="<%= request.getContextPath() %>/assets/images/gatos/gato-<%= (usuario.getId() % 6) + 1 %>.svg" alt="Foto de perfil" />
       <div>
         <h1 id="perfil-nome"><%= usuario.getNome() %></h1>
         <p class="text-muted"><%= usuario.getEmail() %> • Membro desde <%= usuario.getDataCadastro() %></p>
