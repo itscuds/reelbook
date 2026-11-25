@@ -1,6 +1,7 @@
 package br.com.reelbook.servlet;
 
 import br.com.reelbook.dao.FilmeDAO;
+import br.com.reelbook.dao.ResenhaDAO;
 import br.com.reelbook.model.Filme;
 import br.com.reelbook.model.Genero;
 import br.com.reelbook.model.Usuario;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 public class FilmeServlet extends HttpServlet {
 
     private final FilmeDAO dao = new FilmeDAO();
+    private final ResenhaDAO resenhaDAO = new ResenhaDAO();
 
     @Override
     protected void doGet(
@@ -93,6 +95,10 @@ public class FilmeServlet extends HttpServlet {
                     }
 
                     request.setAttribute("filme", detalhe);
+                    request.setAttribute(
+                            "resenhas",
+                            resenhaDAO.listarPorFilme(detalhe.getIdFilme())
+                    );
 
                     // Informa se o filme já é favorito do usuário logado.
                     br.com.reelbook.model.Usuario logado =

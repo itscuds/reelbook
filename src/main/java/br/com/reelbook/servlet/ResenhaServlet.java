@@ -17,6 +17,8 @@ import java.sql.SQLException;
 @WebServlet("/resenhas")
 public class ResenhaServlet extends HttpServlet {
 
+    private static final int LIMITE_TEXTO = 2000;
+
     private final ResenhaDAO dao = new ResenhaDAO();
 
     @Override
@@ -64,8 +66,7 @@ public class ResenhaServlet extends HttpServlet {
                 String idFilmeParam = request.getParameter("idFilme");
                 String texto = request.getParameter("texto");
 
-                if (idFilmeParam == null || texto == null
-                        || texto.trim().isEmpty()) {
+                if (idFilmeParam == null || texto == null) {
 
                     response.sendError(
                             HttpServletResponse.SC_BAD_REQUEST,
@@ -76,6 +77,17 @@ public class ResenhaServlet extends HttpServlet {
 
                 int idFilme = Integer.parseInt(idFilmeParam);
 
+                String erroTexto = validarTexto(texto);
+
+                if (erroTexto != null) {
+                    response.sendRedirect(
+                            request.getContextPath()
+                                    + "/filmes?acao=detalhe&id=" + idFilme
+                                    + "&erroResenha=" + erroTexto + "#resenhas"
+                    );
+                    return;
+                }
+
                 dao.salvar(
                         logado.getId(),
                         idFilme,
@@ -85,6 +97,7 @@ public class ResenhaServlet extends HttpServlet {
                 response.sendRedirect(
                         request.getContextPath()
                                 + "/filmes?acao=detalhe&id=" + idFilme
+                                + "#resenhas"
                 );
                 return;
             }
@@ -94,13 +107,38 @@ public class ResenhaServlet extends HttpServlet {
                 String idParam = request.getParameter("idResenha");
                 String texto = request.getParameter("texto");
 
-                if (idParam == null || texto == null
-                        || texto.trim().isEmpty()) {
+                if (idParam == null || texto == null) {
 
                     response.sendError(
                             HttpServletResponse.SC_BAD_REQUEST,
                             "Dados da resenha inválidos."
                     );
+                    return;
+                }
+
+                String erroTexto = validarTexto(texto);
+
+                if (erroTexto != null) {
+                    String idFilmeParam = request.getParameter("idFilme");
+
+                    if ("detalhe".equals(request.getParameter("origem"))
+                            && idFilmeParam != null) {
+                        response.sendRedirect(
+                                request.getContextPath()
+                                        + "/filmes?acao=detalhe&id="
+                                        + Integer.parseInt(idFilmeParam)
+                                        + "&erroResenha=" + erroTexto
+                                        + "#resenhas"
+                        );
+                    } else {
+                        response.sendError(
+                                HttpServletResponse.SC_BAD_REQUEST,
+                                "vazia".equals(erroTexto)
+                                        ? "Informe o texto da resenha."
+                                        : "A resenha deve ter no máximo "
+                                                + LIMITE_TEXTO + " caracteres."
+                        );
+                    }
                     return;
                 }
 
@@ -157,6 +195,21 @@ public class ResenhaServlet extends HttpServlet {
     ) throws IOException {
 
         String origem = request.getParameter("origem");
+        String idFilmeParam = request.getParameter("idFilme");
+
+        if ("detalhe".equals(origem) && idFilmeParam != null) {
+            try {
+                response.sendRedirect(
+                        request.getContextPath()
+                                + "/filmes?acao=detalhe&id="
+                                + Integer.parseInt(idFilmeParam)
+                                + "#resenhas"
+                );
+                return;
+            } catch (NumberFormatException e) {
+                // idFilme inválido: segue para o redirecionamento padrão
+            }
+        }
 
         if ("perfil".equals(origem)) {
             response.sendRedirect(
@@ -167,6 +220,20 @@ public class ResenhaServlet extends HttpServlet {
                     request.getContextPath() + "/minha-lista?tipo=diario"
             );
         }
+    }
+
+    private String validarTexto(String texto) {
+        String limpo = texto.trim();
+
+        if (limpo.isEmpty()) {
+            return "vazia";
+        }
+
+        if (limpo.length() > LIMITE_TEXTO) {
+            return "longa";
+        }
+
+        return null;
     }
 
     private Usuario getUsuarioLogado(HttpServletRequest request) {

@@ -1,5 +1,6 @@
 package br.com.reelbook.dao;
 
+import br.com.reelbook.model.Resenha;
 import br.com.reelbook.util.ConnectionFactory;
 
 import java.math.BigDecimal;
@@ -51,6 +52,33 @@ public class ResenhaDAO {
                     Date d = rs.getDate("DATA_PUBLICACAO");
                     dto.dataPublicacao = (d != null) ? d.toLocalDate() : LocalDate.now();
                     lista.add(dto);
+                }
+            }
+        }
+        return lista;
+    }
+
+    public List<Resenha> listarPorFilme(int idFilme) throws SQLException {
+        List<Resenha> lista = new ArrayList<>();
+        String sql = "SELECT r.ID_RESENHA, r.ID_USUARIO, r.ID_FILME, r.TEXTO, r.DATA_PUBLICACAO, u.NOME "
+                   + "FROM RESENHA r "
+                   + "JOIN USUARIO u ON r.ID_USUARIO = u.ID_USUARIO "
+                   + "WHERE r.ID_FILME = ? ORDER BY r.DATA_PUBLICACAO DESC, r.ID_RESENHA DESC";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idFilme);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Resenha resenha = new Resenha();
+                    resenha.setIdResenha(rs.getInt("ID_RESENHA"));
+                    resenha.setIdUsuario(rs.getInt("ID_USUARIO"));
+                    resenha.setIdFilme(rs.getInt("ID_FILME"));
+                    resenha.setTexto(rs.getString("TEXTO"));
+                    resenha.setNomeUsuario(rs.getString("NOME"));
+                    Date d = rs.getDate("DATA_PUBLICACAO");
+                    resenha.setDataPublicacao(d != null ? d.toLocalDate() : LocalDate.now());
+                    lista.add(resenha);
                 }
             }
         }
