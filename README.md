@@ -18,12 +18,12 @@ O projeto é feito em Java (Servlets e JSP) com banco de dados H2. Para rodar: `
 
 Cada integrante entrega um CRUD completo (Model, DAO, Servlet e JSP) sobre o banco H2.
 
-| Integrante | Tabela(s) | CRUD | Funcionalidades |
-|---|---|---|---|
-| Nicolle | `GENERO` + base do projeto | cadastrar, listar, renomear, desativar | estrutura Maven, conexão H2, home, identidade visual, filtro por gênero (10) |
-| João | `FILME` + `FILME_GENERO` | cadastrar, listar/buscar, detalhar, editar, desativar | 1, 2, 3, 10 |
-| Estella | `REGISTRO_PESSOAL` | adicionar à lista, ver favoritos/assistidos, mudar status e nota, remover | 4, 5, 6, 7, 9 |
-| Felipe | `USUARIO` + `RESENHA` | cadastro, login/logout, perfil, escrever/editar/apagar resenha | 11, 12, 13, 14, 15 |
+| Integrante | Tabela(s)                                   | CRUD | Funcionalidades |
+|---|---------------------------------------------|---|---|
+| Nicolle | `GENERO` + base do projeto | cadastrar, listar, renomear, desativar | estrutura Maven, conexão H2, home, identidade visual, filtro por gênero (10), perfil de curador (16) |
+| João | `FILME` + `FILME_GENERO`                    | cadastrar, listar/buscar, detalhar, editar, desativar | 1, 2, 3, 10 |
+| Estella | `REGISTRO_PESSOAL`                          | adicionar à lista, ver favoritos/assistidos, mudar status e nota, remover | 4, 5, 6, 7, 9 |
+| Felipe | `USUARIO` + `RESENHA`                       | cadastro, login/logout, perfil, escrever/editar/apagar resenha | 11, 12, 13, 14, 15 |
 
 
 # Funcionalidades
@@ -43,6 +43,7 @@ Cada integrante entrega um CRUD completo (Model, DAO, Servlet e JSP) sobre o ban
 13. Perfil do usuário — Exibir informações e atividade do usuário.
 14. Comentários/reviews — Permitir que o usuário escreva uma avaliação sobre um filme.
 15. Visualizar avaliações — Exibir notas e comentários de outros usuários.
+16. 16. Perfil de curador — Usuário com perfil CURADOR gerencia gêneros e o catálogo de filmes; usuários comuns só consultam.
 # Modelo de Dados (MER)
 
 O banco de dados é o H2, com 6 tabelas criadas pelo arquivo [schema.sql](src/main/resources/schema.sql).
