@@ -43,7 +43,7 @@ Cada integrante entrega um CRUD completo (Model, DAO, Servlet e JSP) sobre o ban
 13. Perfil do usuário — Exibir informações e atividade do usuário.
 14. Comentários/reviews — Permitir que o usuário escreva uma avaliação sobre um filme.
 15. Visualizar avaliações — Exibir notas e comentários de outros usuários.
-16. 16. Perfil de curador — Usuário com perfil CURADOR gerencia gêneros e o catálogo de filmes; usuários comuns só consultam.
+16. Perfil de curador — Usuário com perfil CURADOR gerencia gêneros e o catálogo de filmes; usuários comuns só consultam.
 # Modelo de Dados (MER)
 
 O banco de dados é o H2, com 6 tabelas criadas pelo arquivo [schema.sql](src/main/resources/schema.sql).
