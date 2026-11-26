@@ -31,7 +31,15 @@ public class CuradorInicializador {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return; // já existe, não mexe
+                        // já existe: garante que a senha bate com o hash atual
+                        try (PreparedStatement up = c.prepareStatement(
+                                "UPDATE USUARIO SET SENHA_HASH = ?, PERFIL = 'CURADOR', "
+                                        + "ATIVO = TRUE WHERE EMAIL = ?")) {
+                            up.setString(1, SenhaUtil.gerarHash(SENHA));
+                            up.setString(2, EMAIL);
+                            up.executeUpdate();
+                        }
+                        return;
                     }
                 }
             }
